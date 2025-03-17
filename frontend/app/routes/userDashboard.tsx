@@ -1,4 +1,4 @@
-import React, { use, Suspense } from "react";
+import React, { useEffect, useState } from "react";
 import { Users} from "lucide-react";
 import { fetchUser } from "~/lib/userDashboard";
 
@@ -11,30 +11,52 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
+interface User {
+    user_id: number;
+    email: string;
+    username: string;
+    is_admin: boolean;
+}
 
 const userDashboard = () => {
-    const user = use(fetchUser());
-    const { username, email } = user
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const userData = await fetchUser();
+                setUser(userData);
+            } catch (error) {
+                console.error("Failed to fetch user data.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) return <p>Loading...</p>;
+    if (!user) return <p>User not found</p>;
 
 
     return (
         <div className="p-6">
             <h1 className="text-3xl p-4">User Dashboard</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Suspense>
-                    <Card className="p-4 shadow-lg">
-                        <CardHeader className="flex justify-between items-center">
-                            <CardTitle className="">User Information</CardTitle>
-                            <Users className="w-5 h-5 text-gray-500" />
-                        </CardHeader>
-                        <CardContent className="flex items-center space-x-4">
-                            <div>
-                                <p className="">Name: {username}</p>
-                                <p className="">Email: {email}</p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </Suspense>
+                <Card className="p-4 shadow-lg">
+                    <CardHeader className="flex justify-between items-center">
+                        <CardTitle className="">User Information</CardTitle>
+                        <Users className="w-5 h-5 text-gray-500" />
+                    </CardHeader>
+                    <CardContent className="flex items-center space-x-4">
+                        <div>
+                            <p className="">Name: {user.username}</p>
+                            <p className="">Email: {user.email}</p>
+                        </div>
+                    </CardContent>
+                </Card>
                 <Card className="p-4 shadow-lg">
                     <CardHeader className="flex justify-between items-center">
                         <CardTitle>Remaining Requests</CardTitle>
