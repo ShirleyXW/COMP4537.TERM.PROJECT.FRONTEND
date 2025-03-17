@@ -24,8 +24,8 @@ const formSchema = z.object({
         message: "Username must be at least 2 characters.",
     }),
     email: z.string().email({message: "Email must be align with the form of xx@xx.xx"}),
-    password: z.string().min(6, {message: "Password must be at length of 6."}),
-    confirmedPassword: z.string().min(6, {message: "Confirmed password must be at length of 6."})
+    password: z.string().min(3, {message: "Password must be at least length of 3."}),
+    confirmedPassword: z.string().min(3, {message: "Confirmed password must be at least length of 3."})
 }).refine(
     data => data.confirmedPassword === data.password,
     {
