@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
-from routers import ai, test, api, auth, register, user_dashboard
+from routers import ai, test, api, auth, register, users, user_dashboard
 import models  # noqa: F401
 
 load_dotenv()
@@ -18,7 +18,7 @@ def create_app():
     # CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=["http://localhost:5173", "https://bcit-anthony-sh-s.com", "https://dolphin-app-kdrrc.ondigitalocean.app", "https://www.bcit-anthony-sh-s.com", "https://www.dolphin-app-kdrrc.ondigitalocean.app",],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -30,7 +30,7 @@ def create_app():
     app.include_router(ai.router, prefix=f"{BASE_URL}/ai", tags=["Ai"])
     app.include_router(api.router, prefix=f"{BASE_URL}/api", tags=["api"])
     app.include_router(auth.router, prefix=f"{BASE_URL}/auth", tags=["auth"])
-    app.include_router(auth.router, prefix=f"{BASE_URL}/users", tags=["users"])
+    app.include_router(users.router, prefix=f"{BASE_URL}/users", tags=["users"])
     app.include_router(
         register.router,
         prefix=f"{BASE_URL}",
