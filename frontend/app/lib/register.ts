@@ -1,12 +1,13 @@
 export const register =  async (data: Object)=> {
     try{
-        const res = await fetch("http://localhost:8000/lumisenseai/api/v1/register",
+        const res = await fetch("https://bcit-anthony-sh-s.com/lumisenseai/api/v1/register",
             {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
+                credentials: "include"
             }
         )
         const result = await res.json();
