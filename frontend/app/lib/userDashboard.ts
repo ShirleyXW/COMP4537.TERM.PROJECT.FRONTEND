@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_BASE_URL = "http://localhost:8000/lumisenseai/api/v1";
+const API_BASE_URL = "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
 
 interface User {
     user_id: number,

@@ -26,6 +26,7 @@ const UserDashboard = () => {
         const fetchData = async () => {
             try {
                 const userData = await fetchUser();
+                console.log(userData)
                 setUser(userData);
             } catch (error) {
                 console.error("Failed to fetch user data.");
