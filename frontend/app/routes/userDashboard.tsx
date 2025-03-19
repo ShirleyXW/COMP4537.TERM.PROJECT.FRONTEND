@@ -16,6 +16,7 @@ interface User {
     email: string;
     username: string;
     is_admin: boolean;
+    remaining_requests?: number;
 }
 
 const userDashboard = () => {
@@ -37,8 +38,8 @@ const userDashboard = () => {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading...</p>;
-    if (!user) return <p>User not found</p>;
+    // if (loading) return <p>Loading...</p>;
+    // if (!user) return <p>User not found</p>;
 
 
     return (
@@ -52,8 +53,8 @@ const userDashboard = () => {
                     </CardHeader>
                     <CardContent className="flex items-center space-x-4">
                         <div>
-                            <p className="">Name: {user.username}</p>
-                            <p className="">Email: {user.email}</p>
+                            <p className="">Name: {user?.username || "N/A"}</p>
+                            <p className="">Email: {user?.email || "N/A"}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -62,7 +63,7 @@ const userDashboard = () => {
                         <CardTitle>Remaining Requests</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {/* <p className="text-2xl font-bold">{userData?.remainingRequests}</p> */}
+                        <p className="text-2xl font-bold">{user?.remaining_requests ?? "# number"}</p>
                         <CardDescription>You have requested # times so far</CardDescription>
                     </CardContent>
                 </Card>
