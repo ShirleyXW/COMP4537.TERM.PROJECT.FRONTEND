@@ -48,7 +48,7 @@ const UserDashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 {/* User Information Card */}
-                <Card className="p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
+                <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
                     <CardHeader className="flex justify-between items-center">
                         <div>
                             <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -73,7 +73,7 @@ const UserDashboard = () => {
                 </Card>
 
                 {/* Remaining Requests Card */}
-                <Card className="p-6 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
+                <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
                     <CardHeader className="flex justify-between items-center">
                         <div>
                             <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
