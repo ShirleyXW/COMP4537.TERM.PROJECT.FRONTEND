@@ -1,14 +1,19 @@
 import type { Route } from "./+types/home";
+import { Header } from "../../components/Header";
 
 export const meta = ({}: Route.MetaArgs) => {
     return [
-        { title: "New React Router App" },
+        { title: "Lumisenseai" },
         { name: "description", content: "Welcome to React Router!" },
     ];
 };
 
 const Home = () => {
-    return <div>HOME</div>;
+    return (
+    <>
+    <Header />
+    </>
+);
 };
 
 export default Home;
