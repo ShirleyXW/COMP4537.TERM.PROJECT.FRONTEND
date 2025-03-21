@@ -1,5 +1,5 @@
 import React from 'react'
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function Header() {
     const text = "personalized color recommendations just for you.";
@@ -43,9 +43,11 @@ export function Header() {
                             <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">Smart Lighting Powered by AI —</h1>
                             <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
                                 {text.split("").map((char, index) => (
-                                    <motion.span key={index} custom={index} variants={textVariants} initial="hidden" animate="visible">
-                                        {char}
-                                    </motion.span>
+                                    <AnimatePresence>
+                                        <motion.span key={index} custom={index} variants={textVariants} initial="hidden" animate="visible">
+                                            {char}
+                                        </motion.span>
+                                    </AnimatePresence>
                                 ))}
                             </p>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
