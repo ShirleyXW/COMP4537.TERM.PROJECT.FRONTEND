@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Users } from "lucide-react";
 import { fetchUser } from "~/lib/userDashboard";
-
+import { APIContainer } from "components/APITable";
+import { APIGenerate } from "components/APIGenerate";
 import {
     Card,
     CardContent,
@@ -94,6 +95,19 @@ const UserDashboard = () => {
                         </p>
                     </CardContent>
                 </Card>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <APIContainer initialData={[
+                    {
+                        key: "API Key 1",
+                        status: "active",
+                        action: {
+                            toggleStatus: "#",
+                            deleteKey: "#",
+                        },
+                    }
+                ]} />
+                <APIGenerate />
             </div>
         </div>
     );
