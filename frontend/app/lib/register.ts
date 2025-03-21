@@ -1,6 +1,10 @@
+
+const productUrl = "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
+const localUrl = "http://localhost:8000/";
+
 export const register =  async (data: Object)=> {
     try{
-        const res = await fetch("https://bcit-anthony-sh-s.com/lumisenseai/api/v1/register",
+        const res = await fetch(`${productUrl}/register`,
             {
                 method: "POST",
                 headers:{
