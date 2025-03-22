@@ -15,12 +15,14 @@ interface HeaderProps {
   userImage?: string;
 }
 import { logout } from "@/lib/auth";
+import { useNavigate } from "react-router";
 
 export function DashboardHeader({
   title = "Dashboard",
   userImage,
 }: HeaderProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -31,6 +33,7 @@ export function DashboardHeader({
         success: <b>Logged out successfully!</b>,
         error: <b>Logout failed.</b>,
       });
+      navigate("/");
     } finally {
       setIsLoggingOut(false);
     }
