@@ -23,7 +23,7 @@ export const login = async (prevState: string | null, formData: FormData) => {
             }
         });
 
-        if (res.data.status === 200) {
+        if (res.status === 200) {
             // Return a success flag that the component can use to navigate
             return { success: true };
         }
