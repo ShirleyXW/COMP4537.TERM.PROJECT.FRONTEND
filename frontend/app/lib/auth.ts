@@ -25,16 +25,16 @@ export const login = async (prevState: string | null, formData: FormData) => {
 
         if (res.status === 200) {
             // Return a success flag that the component can use to navigate
-            return { success: true };
+            return res.data;
         }
         
         return null;
     } catch (error: any) {
         console.error(error);
         if (error.response?.data?.detail) {
-            return error.response.data.detail;
+            return {"message": `${error.response.data.detail}`, "success": false};
         }
-        return "Login failed. Please try again.";
+        return {"message": "Login failed. Please try again.", "success": false};
     }  
 }
 

@@ -23,13 +23,19 @@ export function LoginForm({
   
   // Handle successful login
   useEffect(() => {
-    if (result && typeof result === 'object' && 'success' in result) {
-      navigate('/userDashboard');
+    if (!result) return;
+
+    if (result.success) {
+      if (result.is_admin) {
+        navigate("/adminDashboard")
+      } else {
+        navigate("/userDashboard");
+      }
     }
   }, [result, navigate]);
 
   // Determine if we have an error message
-  const errorMessage = typeof result === 'string' ? result : null;
+  const errorMessage = !result?.success ? result?.message : null;
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
