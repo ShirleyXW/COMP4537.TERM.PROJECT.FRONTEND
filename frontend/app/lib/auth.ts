@@ -44,5 +44,6 @@ export async function logout() {
     console.log("Logout successful");
   } catch (error) {
     console.error("Logout failed:", error);
+    throw error;
   }
 }
