@@ -40,7 +40,7 @@ export const login = async (prevState: string | null, formData: FormData) => {
 
 export async function logout() {
   try {
-    await axios.delete("/api/token", { withCredentials: true });
+    await axios.delete("/auth/token", { withCredentials: true });
     console.log("Logout successful");
   } catch (error) {
     console.error("Logout failed:", error);
