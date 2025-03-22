@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { redirect, useLoaderData } from "react-router";
 import { Users } from "lucide-react";
 import { fetchUser, fetchApiKeys } from "~/lib/userDashboard";
@@ -39,7 +40,6 @@ const UserDashboard = () => {
 
   // if (loading) return <p>Loading...</p>;
   // if (!user) return <p>User not found</p>;
-const UserDashboard = () => {
   const [apiKeys, setApiKeys] = useState([]);
   
   useEffect(() => {
@@ -59,8 +59,6 @@ const UserDashboard = () => {
   useEffect(() => {
     console.log("apiKeys updated:", apiKeys);
   }, [apiKeys]);
-  // if (loading) return <p>Loading...</p>;
-  // if (!user) return <p>User not found</p>;
 
   return (
     <div className="p-6">
