@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { redirect, useLoaderData } from "react-router";
 import { Users } from "lucide-react";
-import { fetchUser } from "~/lib/userDashboard";
+import { fetchUser } from "~/lib/user";
 import { APIContainer } from "components/APITable";
 import { APIGenerate } from "components/APIGenerate";
 import { DashboardHeader } from "components/DashboardHeader";
@@ -12,8 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import axios from "axios";
-import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router";
 
 interface User {
   user_id: number;
@@ -23,37 +21,21 @@ interface User {
   remaining_requests?: number;
 }
 
+export const loader = async () => {
+  try {
+    const user: User = await fetchUser();
+    return { user };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      return redirect("/");
+    }
+
+    throw error;
+  }
+};
+
 const UserDashboard = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const userData = await fetchUser();
-        console.log(userData);
-        setUser(userData);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const status_code = error.response?.status;
-
-          if (status_code === 401) {
-            toast.error("401 not Authorized. Please login first.");
-            navigate("/");
-          } 
-        }
-
-        console.log("error fetching user data", error);
-
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
-  }, [navigate]);
+  const { user } = useLoaderData<typeof loader>();
 
   // if (loading) return <p>Loading...</p>;
   // if (!user) return <p>User not found</p>;

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { redirect, useLoaderData } from "react-router";
+import { fetchAdmin } from "~/lib/admin";
 import { Users } from "lucide-react";
 import { DashboardHeader } from "components/DashboardHeader";
-import { fetchAdmin } from "@/lib/admin";
-import { toast } from "react-hot-toast";
 
 import {
   Card,
@@ -12,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import axios from "axios";
-import { useNavigate } from "react-router";
 
 interface Admin {
   user_id: number;
@@ -29,42 +27,28 @@ interface User {
   remaining_requests: number;
 }
 
-const AdminDashboard = () => {
-  const [admin, setAdmin] = useState<Admin | null>(null);
-  const [loading, setLoading] = useState(true);
+export const loader = async () => {
+  try {
+    const admin: Admin = await fetchAdmin();
+    const users: User[] = [];
 
-  const users: User[] = []
+    return { admin, users };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const status_code = error.response?.status;
 
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const loadAdmin = async () => {
-      try {
-        const adminData = await fetchAdmin();
-        setAdmin(adminData)
-      } catch (error) {
-
-        if (axios.isAxiosError(error)) {
-            const status_code = error.response?.status;
-
-            if (status_code === 401) {
-                toast.error("401 not Authorized. Please login first.")
-                navigate("/");
-            } else if (status_code === 403) {
-                toast.error("403 Forbidden. Access Denied.")
-                navigate("/");
-            } 
-        }
-
-        console.log(error)
-
-      } finally {
-        setLoading(false);
+      if (status_code === 401) {
+        return redirect("/");
+      } else if (status_code === 403) {
+        return redirect("/userDashboard");
       }
-    };
+    }
+    throw error;
+  }
+};
 
-    loadAdmin();
-  }, [navigate]);
+const AdminDashboard = () => {
+  const { admin, users } = useLoaderData<typeof loader>();
 
   return (
     <div className="p-6">

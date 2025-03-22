@@ -5,11 +5,13 @@ import {
     Outlet,
     Scripts,
     ScrollRestoration,
+    useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Toaster } from "react-hot-toast";
+import LoadingSpinner from "components/LoadingSpinner";
 
 export const links: Route.LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -25,6 +27,9 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
+    const navigation = useNavigation();
+    const isLoading = navigation.state === "loading";
+
     return (
       <html lang="en">
         <head>
@@ -35,6 +40,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </head>
         <body>
           <main className="max-w-[1024px] mx-auto px-5 py-10">
+            {isLoading && <LoadingSpinner />}
             <Toaster />
             {children}
             <ScrollRestoration />
