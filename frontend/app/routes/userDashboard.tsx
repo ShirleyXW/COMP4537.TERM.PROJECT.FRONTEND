@@ -55,6 +55,9 @@ const UserDashboard = () => {
     fetchKeys();
   }, [user]); 
 
+  useEffect(() => {
+    console.log("apiKeys updated:", apiKeys);
+  }, [apiKeys]);
   // if (loading) return <p>Loading...</p>;
   // if (!user) return <p>User not found</p>;
 
@@ -117,7 +120,7 @@ const UserDashboard = () => {
         </Card>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        <APIContainer initialData={apiKeys} />
+        {apiKeys.length > 0 && <APIContainer initialData={apiKeys} />}
         {user && <APIGenerate userId={user.user_id} />}
       </div>
     </div>

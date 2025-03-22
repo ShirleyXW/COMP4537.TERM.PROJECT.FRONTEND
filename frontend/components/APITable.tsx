@@ -46,7 +46,7 @@ export function APIContainer({ initialData }: { initialData: APITable[] }) {
         );
     };
     useEffect(() => {
-        console.log("Updated data:", data);
+        console.log("Updated data in api container:", data);
     }, [data]);
 
     return (
