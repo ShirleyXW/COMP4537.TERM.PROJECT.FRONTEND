@@ -37,3 +37,12 @@ export const login = async (prevState: string | null, formData: FormData) => {
         return "Login failed. Please try again.";
     }  
 }
+
+export async function logout() {
+  try {
+    await axios.delete("/api/token", { withCredentials: true });
+    console.log("Logout successful");
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+}
