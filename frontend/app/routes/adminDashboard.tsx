@@ -12,13 +12,6 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 
-interface Admin {
-  user_id: number;
-  email: string;
-  username: string;
-  is_admin: boolean;
-}
-
 interface User {
   id: number;
   username: string;
@@ -29,7 +22,7 @@ interface User {
 
 export const loader = async () => {
   try {
-    const admin: Admin = await fetchAdmin();
+    const admin = await fetchAdmin();
     const users: User[] = [];
 
     return { admin, users };

@@ -14,17 +14,9 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 
-interface User {
-  user_id: number;
-  email: string;
-  username: string;
-  is_admin: boolean;
-  remaining_requests?: number;
-}
-
 export const loader = async () => {
   try {
-    const user: User = await fetchUser();
+    const user = await fetchUser();
     return { user };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {

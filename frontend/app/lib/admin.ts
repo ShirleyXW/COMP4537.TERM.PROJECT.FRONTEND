@@ -15,8 +15,11 @@ export const fetchAdmin = async (): Promise<User> => {
       withCredentials: true,
     });
 
+    console.log(response.data)
+
     return response.data as User;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
