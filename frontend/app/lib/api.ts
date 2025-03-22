@@ -33,3 +33,25 @@ export const generateApiKey = async (user_id: number) => {
     console.error(error);
   }
 };
+
+export const deleteKey = async (key: string, id:number) => {
+  try {
+    const res = await fetch(getApiUrl(`/api/delete-key`), {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': key,
+      },
+      body: JSON.stringify({ user_id: id }),
+    });
+    const result = await res.json();
+    if (res.ok) {
+      return { success: true, message: result.message || 'API key deleted' };
+    }
+    return { success: false, error: result.message || 'Unknown error' };
+  }
+  catch (error) {
+    console.error(error);
+  }
+}

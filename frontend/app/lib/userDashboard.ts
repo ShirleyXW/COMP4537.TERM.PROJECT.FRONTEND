@@ -37,7 +37,7 @@ export const fetchApiKeys = async (user_id:number) => {
             status: "active",
             action: {
                 toggleStatus: "Toggle Status",
-                deleteKey: `/delete-key?user_id=${user_id}`,
+                deleteKey: user_id,
             }
         }));
     

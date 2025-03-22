@@ -22,14 +22,14 @@ import {
 
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
-
+import { deleteKey } from "@/lib/api";
 
 export type APITable = {
     key: string;
     status: "active" | "deactive" | "pending";
     action: {
         toggleStatus: string;
-        deleteKey: string;
+        deleteKey: number;
     };
 }
 
@@ -44,6 +44,18 @@ export function APIContainer({ initialData }: { initialData: APITable[] }) {
                 item.key === row.key ? { ...item, status: newStatus } : item
             )
         );
+    };
+    const handleApiDelete = async (key: string, deleteKeyId: number) => {
+        try {
+            const result = await deleteKey(key, deleteKeyId);
+            if (result?.success) {
+                setData((prevData) => prevData.filter((item) => item.key !== key));
+            } else {
+                console.error("Failed to delete API key:", result?.error);
+            }
+        } catch (error) {
+            console.error("Failed to delete API key:", error);
+        }
     };
     useEffect(() => {
         console.log("Updated data in api container:", data);
@@ -81,7 +93,7 @@ export function APIContainer({ initialData }: { initialData: APITable[] }) {
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction className="bg-gradient-to-br from-blue-500 to-pink-400">Continue</AlertDialogAction>
+                                            <AlertDialogAction className="bg-gradient-to-br from-blue-500 to-pink-400" onClick={()=>handleApiDelete(row.key, row.action.deleteKey)}>Continue</AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
