@@ -7,14 +7,19 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-
+import { generateApiKey } from "@/lib/api";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
-export function APIGenerate (){
+export function APIGenerate ({userId}: {userId: number}) {
 
     const generateKey = () => {
-        console.log("Generate Key");
+        try {
+            const result = generateApiKey(userId);
+        }
+        catch (error) {
+            console.error("Failed to generate key");
+        }
     };
     
     return (
