@@ -24,3 +24,26 @@ export const fetchUser = async (): Promise<User> => {
         throw error
     }  
 }
+
+export const fetchApiKeys = async (user_id:number) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/api/get-key?user_id=${user_id}`, {
+            withCredentials: true,
+        });
+
+        const result = response.data.key;
+        const apiTable = result.map((key: string) => ({
+            key,
+            status: "active",
+            action: {
+                toggleStatus: "Toggle Status",
+                deleteKey: `/delete-key?user_id=${user_id}`,
+            }
+        }));
+    
+        return apiTable;
+    } catch (error) {
+        console.error("Error fetching API keys:", error);
+        throw error
+    }
+}
