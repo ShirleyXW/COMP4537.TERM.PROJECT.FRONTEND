@@ -1,3 +1,4 @@
+import { Button } from "~/components/ui/button";
 import type { Route } from "./+types/home";
 
 export const meta = ({}: Route.MetaArgs) => {
