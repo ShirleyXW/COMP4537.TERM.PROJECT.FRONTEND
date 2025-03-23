@@ -19,6 +19,8 @@ const Home = () => {
             try {
                 const isAdmin = await getIsAdmin();
 
+                console.log(isAdmin)
+
                 if (isAdmin) {
                     navigate("/adminDashboard");
                 } else if (isAdmin == false) {
