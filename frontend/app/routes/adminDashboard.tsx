@@ -1,4 +1,5 @@
-import { redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { useEffect, useState } from "react";
+import { useAsyncError, useNavigate } from "react-router";
 import { fetchAdmin } from "~/lib/admin";
 import { Users } from "lucide-react";
 import { DashboardHeader } from "components/DashboardHeader";
@@ -12,39 +13,51 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 
+interface Admin {
+  user_id: number;
+  username: string;
+  email: string;
+  is_admin: boolean;
+}
+
 interface User {
-  id: number;
+  user_id: number;
   username: string;
   email: string;
   consumedAP: number;
   remaining_requests: number;
 }
 
-// export const loader = async ({ request }: LoaderFunctionArgs) => {
-//   try {
-//     const admin = await fetchAdmin();
-//     const users: User[] = [];
+const AdminDashboard = () => {
+  const [admin, setAdmin] = useState<Admin>();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
-//     return { admin, users };
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-//       const status_code = error.response?.status;
-
-//       if (status_code === 401) {
-//         return redirect("/");
-//       } else if (status_code === 403) {
-//         return redirect("/userDashboard");
-//       }
-//     }
-//     throw error;
-//   }
-// };
-
-const AdminDashboard = async () => {
-  // const { admin, users } = useLoaderData<typeof loader>();
-  const admin = await fetchAdmin();
-  const users: User[] = [];
-
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const adminData = await fetchAdmin();
+        setAdmin(adminData);
+        setUsers([]);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const status_code = error.response?.status;
+          if (status_code === 401) {
+            navigate("/");
+            return;
+          } else if (status_code === 403) {
+            navigate("/userDashboard");
+            return;
+          }
+        }
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [navigate]);
 
   return (
     <div className="p-6">
