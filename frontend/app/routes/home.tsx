@@ -23,11 +23,9 @@ const Home = () => {
                 const isAdminData = await getIsAdmin();
                 setIsAdmin(isAdminData)
 
-                console.log(isAdmin)
-
-                if (isAdmin) {
+                if (isAdminData) {
                     navigate("/adminDashboard");
-                } else if (isAdmin == false) {
+                } else if (isAdminData == false) {
                     navigate("/userDashboard");
                 }
             } catch (error) {
@@ -39,7 +37,7 @@ const Home = () => {
         checkRedirect();
     }, [navigate])
 
-    if (loading) {
+    if (loading || isAdmin == undefined) {
         return <LoadingSpinner />
     }
 
