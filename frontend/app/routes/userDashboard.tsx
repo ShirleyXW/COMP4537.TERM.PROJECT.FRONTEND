@@ -18,14 +18,6 @@ import toast from "react-hot-toast";
 import { fetchUserUsage } from "~/lib/userDashboard";
 import type { UserUsage, User } from "~/lib/userDashboard";
 
-interface User {
-  user_id: number;
-  email: string;
-  username: string;
-  is_admin: boolean;
-  remaining_requests?: number;
-}
-
 export type APITable = {
   key: string;
   status: "active" | "deactive" | "pending";
