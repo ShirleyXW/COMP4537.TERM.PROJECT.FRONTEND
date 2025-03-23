@@ -6,16 +6,33 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import { generateApiKey } from "@/lib/api";
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import type { APITable } from "~/routes/userDashboard";
 
-export function APIGenerate ({userId}: {userId: number}) {
+interface APIGenerateProps {
+    userId: number;
+    setApiKeys: React.Dispatch<React.SetStateAction<APITable[]>>;
+  }
 
-    const generateKey = () => {
+export function APIGenerate ({userId, setApiKeys}: APIGenerateProps) {
+
+    const generateKey = async () => {
         try {
-            const result = generateApiKey(userId);
+            const result = await generateApiKey(userId);
+            if (result?.success) {
+                const updatedData = {
+                    key: result.key,
+                    status: "active" as "active",
+                    action: {
+                        toggleStatus: "Toggle Status",
+                        deleteKey: userId,
+                    }
+                }
+                setApiKeys((prevData) => [...prevData, updatedData]);
+            }
         }
         catch (error) {
             console.error("Failed to generate key");

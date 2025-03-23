@@ -20,10 +20,19 @@ interface User {
   remaining_requests?: number;
 }
 
+export type APITable = {
+  key: string;
+  status: "active" | "deactive" | "pending";
+  action: {
+      toggleStatus: string;
+      deleteKey: number;
+  };
+}
+
 const UserDashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [apiKeys, setApiKeys] = useState([]);
+  const [apiKeys, setApiKeys] = useState<APITable[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +67,13 @@ const UserDashboard = () => {
   useEffect(() => {
     console.log("apiKeys updated:", apiKeys);
   }, [apiKeys]);
+
+  const handleApiKeyGeneration = async () => {
+    console.log("Generating API Key");
+  };
+
+
+
   // if (loading) return <p>Loading...</p>;
   // if (!user) return <p>User not found</p>;
 
@@ -121,7 +137,7 @@ const UserDashboard = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         {apiKeys.length > 0 && <APIContainer initialData={apiKeys} />}
-        {user && <APIGenerate userId={user.user_id} />}
+        {user && <APIGenerate userId={user.user_id} setApiKeys={setApiKeys}/>}
       </div>
     </div>
   );

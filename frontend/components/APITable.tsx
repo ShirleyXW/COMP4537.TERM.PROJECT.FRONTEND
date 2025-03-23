@@ -23,15 +23,7 @@ import {
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { deleteKey } from "@/lib/api";
-
-export type APITable = {
-    key: string;
-    status: "active" | "deactive" | "pending";
-    action: {
-        toggleStatus: string;
-        deleteKey: number;
-    };
-}
+import type { APITable } from "~/routes/userDashboard";
 
 export function APIContainer({ initialData }: { initialData: APITable[] }) {
     const [data, setData] = useState<APITable[]>(initialData);
@@ -60,6 +52,10 @@ export function APIContainer({ initialData }: { initialData: APITable[] }) {
     useEffect(() => {
         console.log("Updated data in api container:", data);
     }, [data]);
+
+    useEffect(() => {
+        setData(initialData);
+    }, [initialData]);
 
     return (
         <>
