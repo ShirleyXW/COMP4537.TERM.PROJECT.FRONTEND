@@ -13,6 +13,7 @@ import {
 interface HeaderProps {
   title?: string;
   userImage?: string;
+  isAdmin?: boolean;
 }
 import { logout } from "@/lib/auth";
 import { useNavigate } from "react-router";
@@ -20,6 +21,7 @@ import { useNavigate } from "react-router";
 export function DashboardHeader({
   title = "Dashboard",
   userImage,
+  isAdmin = false,
 }: HeaderProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
@@ -40,7 +42,13 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="w-full h-16 border-b bg-gradient-to-br from-blue-400 to-blue-200 flex items-center px-4">
+    <header
+      className={`w-full h-16 border-b bg-gradient-to-br flex items-center px-4 ${
+        isAdmin
+          ? "from-rose-400 to-rose-200" // For admins
+          : "from-blue-400 to-blue-200" // For users
+      }`}
+    >
       <div className="w-full max-w-screen-xl mx-auto flex items-center justify-between">
         <div className="w-10" />
 

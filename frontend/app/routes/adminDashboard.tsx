@@ -73,7 +73,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="p-6">
-      <DashboardHeader title="Admin Dashboard" />
+      <DashboardHeader title="Admin Dashboard" isAdmin={true}/>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         {/* Admin Information Card */}
