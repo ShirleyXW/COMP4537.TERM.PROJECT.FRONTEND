@@ -87,8 +87,8 @@ const UserDashboard = () => {
     console.log("apiKeys updated:", apiKeys);
   }, [apiKeys]);
 
-  const handleApiKeyGeneration = async () => {
-    console.log("Generating API Key");
+  const handleApiKeyStatusChange = async (updatedData: APITable[]) => {
+    setApiKeys(updatedData);
   };
 
   if (loading || !user) {
@@ -154,7 +154,7 @@ const UserDashboard = () => {
         </Card>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-        {apiKeys.length > 0 && <APIContainer initialData={apiKeys} />}
+        {apiKeys.length > 0 && <APIContainer initialData={apiKeys} onStatusUpdate={handleApiKeyStatusChange}/>}
         {user && <APIGenerate userId={user.user_id} setApiKeys={setApiKeys}/>}
       </div>
     </div>

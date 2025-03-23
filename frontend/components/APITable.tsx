@@ -25,17 +25,17 @@ import { Switch } from "@/components/ui/switch";
 import { deleteKey } from "@/lib/api";
 import type { APITable } from "~/routes/userDashboard";
 
-export function APIContainer({ initialData }: { initialData: APITable[] }) {
+export function APIContainer({ initialData , onStatusUpdate }: { initialData: APITable[], onStatusUpdate:(updatedData: APITable[]) => void }) {
     const [data, setData] = useState<APITable[]>(initialData);
 
     const switchStatus = (row: APITable) => {
-        const newStatus = row.status === "active" ? "deactive" : "active";
-
-        setData((prevData) =>
-            prevData.map((item) =>
-                item.key === row.key ? { ...item, status: newStatus } : item
-            )
+        const newStatus = row.status === "active" ? "deactive" as "deactive": "active" as "active";
+        const updatedData = data.map((item) =>
+            item.key === row.key ? { ...item, status: newStatus } : item
         );
+        setData(updatedData);
+        onStatusUpdate(updatedData);
+
     };
     const handleApiDelete = async (key: string, deleteKeyId: number) => {
         try {
