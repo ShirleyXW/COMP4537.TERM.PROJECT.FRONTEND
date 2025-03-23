@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useAsyncError, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { fetchAdmin } from "~/lib/admin";
 import { Users } from "lucide-react";
 import { DashboardHeader } from "components/DashboardHeader";
-
+import LoadingSpinner from "components/LoadingSpinner";
 import {
   Card,
   CardContent,
@@ -15,8 +15,8 @@ import axios from "axios";
 
 interface Admin {
   user_id: number;
-  username: string;
   email: string;
+  username: string;
   is_admin: boolean;
 }
 
@@ -29,10 +29,10 @@ interface User {
 }
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [admin, setAdmin] = useState<Admin>();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
@@ -58,6 +58,10 @@ const AdminDashboard = () => {
     }
     fetchData();
   }, [navigate]);
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <div className="p-6">

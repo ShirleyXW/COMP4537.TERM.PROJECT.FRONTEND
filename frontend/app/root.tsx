@@ -5,7 +5,6 @@ import {
     Outlet,
     Scripts,
     ScrollRestoration,
-    useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -27,8 +26,6 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
-    const navigation = useNavigation();
-    const isLoading = navigation.state === "loading";
 
     return (
       <html lang="en">
@@ -40,7 +37,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </head>
         <body>
           <main className="max-w-[1024px] mx-auto px-5 py-10">
-            {isLoading && <LoadingSpinner />}
             <Toaster />
             {children}
             <ScrollRestoration />

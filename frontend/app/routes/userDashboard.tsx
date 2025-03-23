@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { redirect, useLoaderData } from "react-router";
+import { useNavigate } from "react-router";
 import { Users } from "lucide-react";
 import { fetchUser, fetchApiKeys } from "~/lib/userDashboard";
 import { APIContainer } from "components/APITable";
@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import axios from "axios";
+import LoadingSpinner from "components/LoadingSpinner";
 
 interface User {
   user_id: number;
@@ -22,25 +23,29 @@ interface User {
   remaining_requests?: number;
 }
 
-export const loader = async () => {
-  try {
-    const user: User = await fetchUser();
-    return { user };
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      return redirect("/");
-    }
-
-    throw error;
-  }
-};
-
 const UserDashboard = () => {
-  const { user } = useLoaderData<typeof loader>();
-
-  // if (loading) return <p>Loading...</p>;
-  // if (!user) return <p>User not found</p>;
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const userData: User = await fetchUser();
+          setUser(userData);
+        } catch (error) {
+          if (axios.isAxiosError(error) && error.response?.status === 401) {
+            navigate("/");
+            return;
+          }
+          throw error;
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }, [navigate]);
   
   useEffect(() => {
     const fetchKeys = async () => {
@@ -59,6 +64,10 @@ const UserDashboard = () => {
   useEffect(() => {
     console.log("apiKeys updated:", apiKeys);
   }, [apiKeys]);
+
+    if (loading) {
+      return <LoadingSpinner />
+    }
 
   return (
     <div className="p-6">
