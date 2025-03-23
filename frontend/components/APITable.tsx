@@ -41,7 +41,12 @@ export function APIContainer({ initialData , onStatusUpdate }: { initialData: AP
         try {
             const result = await deleteKey(key, deleteKeyId);
             if (result?.success) {
-                setData((prevData) => prevData.filter((item) => item.key !== key));
+                setData((prevData) => {
+                    const updatedApiKeys = prevData.filter((item) => item.key !== key);
+                    localStorage.setItem("apiKeys", JSON.stringify(updatedApiKeys));
+                    return updatedApiKeys;
+                }
+            );
             } else {
                 console.error("Failed to delete API key:", result?.error);
             }

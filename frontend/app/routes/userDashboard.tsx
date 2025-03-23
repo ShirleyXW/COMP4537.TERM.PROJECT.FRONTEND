@@ -70,22 +70,37 @@ const UserDashboard = () => {
   }, [navigate]);
 
   useEffect(() => {
-    const fetchKeys = async () => {
-      if (!user) return;
-      console.log("fetching keys");
-      try {
-        const keys = await fetchApiKeys(user.user_id);
-        setApiKeys(keys);
-      } catch (error) {
-        console.error("Failed to fetch keys");
-      }
-    };
-    fetchKeys();
+    const savedApiKeys = localStorage.getItem("apiKeys");
+    if (savedApiKeys) {
+      setApiKeys(JSON.parse(savedApiKeys));
+    } else {
+      const fetchKeys = async () => {
+        if (!user) return;
+        console.log("fetching keys");
+        try {
+          const keys = await fetchApiKeys(user.user_id);
+          setApiKeys(keys);
+        } catch (error) {
+          console.error("Failed to fetch keys");
+        }
+      };
+      fetchKeys();
+    }
   }, [user]);
 
   useEffect(() => {
     console.log("apiKeys updated:", apiKeys);
+    if (apiKeys.length > 0) {
+      localStorage.setItem("apiKeys", JSON.stringify(apiKeys));
+    }
   }, [apiKeys]);
+
+  useEffect(() => {
+    const savedApiKeys = localStorage.getItem("apiKeys");
+    if (savedApiKeys) {
+      setApiKeys(JSON.parse(savedApiKeys));
+    }
+  }, []);
 
   const handleApiKeyStatusChange = async (updatedData: APITable[]) => {
     setApiKeys(updatedData);
