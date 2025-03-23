@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { Users } from "lucide-react";
 import { fetchUser, fetchApiKeys } from "~/lib/userDashboard";
 import { APIContainer } from "components/APITable";
@@ -11,6 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import axios from "axios";
+import LoadingSpinner from "components/LoadingSpinner";
+import toast from "react-hot-toast";
+import { fetchUserUsage } from "~/lib/userDashboard";
+import type { UserUsage, User } from "~/lib/userDashboard";
 
 interface User {
   user_id: number;
@@ -28,28 +34,41 @@ export type APITable = {
       deleteKey: number;
   };
 }
-
 const UserDashboard = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState<APITable[]>([]);
+  const [usage, setUsage] = useState<UserUsage | null>(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userData = await fetchUser();
-        console.log(userData)
+        // user infomation
+        const userData: User = await fetchUser();
         setUser(userData);
+
+        // usage information
+        const usageData: UserUsage = await fetchUserUsage();
+        setUsage(usageData);
+
       } catch (error) {
-        console.error("Failed to fetch user data.");
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          toast.error(
+            "Authentication error: Your session has expired. Please log in again."
+          );
+          navigate("/");
+          return;
+        }
+        throw error;
       } finally {
         setLoading(false);
       }
     };
     fetchData();
+  }, [navigate]);
 
-  }, []);
-  
   useEffect(() => {
     const fetchKeys = async () => {
       if (!user) return;
@@ -62,7 +81,7 @@ const UserDashboard = () => {
       }
     };
     fetchKeys();
-  }, [user]); 
+  }, [user]);
 
   useEffect(() => {
     console.log("apiKeys updated:", apiKeys);
@@ -72,10 +91,9 @@ const UserDashboard = () => {
     console.log("Generating API Key");
   };
 
-
-
-  // if (loading) return <p>Loading...</p>;
-  // if (!user) return <p>User not found</p>;
+  if (loading || !user) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="p-6">
@@ -127,7 +145,7 @@ const UserDashboard = () => {
           </CardHeader>
           <CardContent className="mt-4">
             <p className="text-4xl font-bold text-green-600 dark:text-green-400 text-center">
-              {user?.remaining_requests ?? "--"}
+              {usage?.remaining_requests ?? "--"}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
               You have requested # times so far
