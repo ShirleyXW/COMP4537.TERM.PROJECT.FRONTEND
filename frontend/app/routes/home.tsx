@@ -39,7 +39,7 @@ const Home = () => {
         checkRedirect();
     }, [navigate])
 
-    if (loading || isAdmin == undefined) {
+    if (loading) {
         return <LoadingSpinner />
     }
 
