@@ -20,28 +20,31 @@ interface User {
   remaining_requests: number;
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  try {
-    const admin = await fetchAdmin();
-    const users: User[] = [];
+// export const loader = async ({ request }: LoaderFunctionArgs) => {
+//   try {
+//     const admin = await fetchAdmin();
+//     const users: User[] = [];
 
-    return { admin, users };
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const status_code = error.response?.status;
+//     return { admin, users };
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+//       const status_code = error.response?.status;
 
-      if (status_code === 401) {
-        return redirect("/");
-      } else if (status_code === 403) {
-        return redirect("/userDashboard");
-      }
-    }
-    throw error;
-  }
-};
+//       if (status_code === 401) {
+//         return redirect("/");
+//       } else if (status_code === 403) {
+//         return redirect("/userDashboard");
+//       }
+//     }
+//     throw error;
+//   }
+// };
 
-const AdminDashboard = () => {
-  const { admin, users } = useLoaderData<typeof loader>();
+const AdminDashboard = async () => {
+  // const { admin, users } = useLoaderData<typeof loader>();
+  const admin = await fetchAdmin();
+  const users: User[] = [];
+
 
   return (
     <div className="p-6">
