@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 import LoadingSpinner from "components/LoadingSpinner";
+import toast from "react-hot-toast";
 
 interface User {
   user_id: number;
@@ -29,24 +30,27 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState([]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const userData: User = await fetchUser();
-          setUser(userData);
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.response?.status === 401) {
-            navigate("/");
-            return;
-          }
-          throw error;
-        } finally {
-          setLoading(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData: User = await fetchUser();
+        setUser(userData);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          toast.error(
+            "Authentication error: Your session has expired. Please log in again."
+          );
+          navigate("/");
+          return;
         }
-      };
-      fetchData();
-    }, [navigate]);
-  
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [navigate]);
+
   useEffect(() => {
     const fetchKeys = async () => {
       if (!user) return;
@@ -59,15 +63,15 @@ const UserDashboard = () => {
       }
     };
     fetchKeys();
-  }, [user]); 
+  }, [user]);
 
   useEffect(() => {
     console.log("apiKeys updated:", apiKeys);
   }, [apiKeys]);
 
-    if (loading) {
-      return <LoadingSpinner />
-    }
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="p-6">

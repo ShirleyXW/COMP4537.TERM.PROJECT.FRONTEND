@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface Admin {
   user_id: number;
@@ -44,9 +45,16 @@ const AdminDashboard = () => {
         if (axios.isAxiosError(error)) {
           const status_code = error.response?.status;
           if (status_code === 401) {
+            toast.error(
+              "Authentication error: Your session has expired. Please log in again."
+            );
             navigate("/");
+
             return;
           } else if (status_code === 403) {
+            toast.error(
+              "Access denied: You do not have permission to access this page."
+            );
             navigate("/userDashboard");
             return;
           }
@@ -60,7 +68,7 @@ const AdminDashboard = () => {
   }, [navigate]);
 
   if (loading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   return (
