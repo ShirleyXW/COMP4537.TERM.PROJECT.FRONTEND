@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Users } from "lucide-react";
+import { Users, Lightbulb } from "lucide-react";
 import { fetchUser, fetchApiKeys } from "~/lib/userDashboard";
 import { APIContainer } from "components/APITable";
 import { APIGenerate } from "components/APIGenerate";
@@ -157,13 +157,16 @@ const UserDashboard = () => {
                 API usage status
               </CardDescription>
             </div>
+            <div className="bg-yellow-100 dark:bg-blue-800 p-3 rounded-full">
+              <Lightbulb className="w-6 h-6 text-yellow-600 dark:text-blue-300"/>
+            </div>
           </CardHeader>
-          <CardContent className="mt-4">
-            <p className="text-4xl font-bold text-green-600 dark:text-green-400 text-center">
+          <CardContent className="">
+            <p className="text-4xl font-bold text-green-600 dark:text-green-400 ">
               {usage?.remaining_requests ?? "--"}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
-              You have requested # times so far
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              You have requested {usage?.total_used ?? "--"} times so far
             </p>
           </CardContent>
         </Card>

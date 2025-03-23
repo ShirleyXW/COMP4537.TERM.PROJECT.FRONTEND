@@ -40,11 +40,11 @@ export function DashboardHeader({
   };
 
   return (
-    <header className="w-full h-16 border-b bg-background flex items-center px-4">
+    <header className="w-full h-16 border-b bg-gradient-to-br from-blue-400 to-blue-200 flex items-center px-4">
       <div className="w-full max-w-screen-xl mx-auto flex items-center justify-between">
         <div className="w-10" />
 
-        <h1 className="text-xl font-semibold">{title}</h1>
+        <h1 className="text-xl text-white font-semibold">{title}</h1>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
