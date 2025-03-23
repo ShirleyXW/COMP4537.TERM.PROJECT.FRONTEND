@@ -15,26 +15,28 @@ import {
 import axios from "axios";
 import LoadingSpinner from "components/LoadingSpinner";
 import toast from "react-hot-toast";
+import { fetchUserUsage } from "~/lib/userDashboard";
+import type { UserUsage, User } from "~/lib/userDashboard";
 
-interface User {
-  user_id: number;
-  email: string;
-  username: string;
-  is_admin: boolean;
-  remaining_requests?: number;
-}
 
 const UserDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState([]);
+  const [usage, setUsage] = useState<UserUsage | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // user infomation
         const userData: User = await fetchUser();
         setUser(userData);
+
+        // usage information
+        const usageData: UserUsage = await fetchUserUsage();
+        setUsage(usageData);
+
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 401) {
           toast.error(
@@ -123,7 +125,7 @@ const UserDashboard = () => {
           </CardHeader>
           <CardContent className="mt-4">
             <p className="text-4xl font-bold text-green-600 dark:text-green-400 text-center">
-              {user?.remaining_requests ?? "--"}
+              {usage?.remaining_requests ?? "--"}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
               You have requested # times so far
