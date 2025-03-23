@@ -34,6 +34,6 @@ export const getIsAdmin = async (): Promise<boolean | null> => {
     return response.data;
   } catch (error) {
     console.error(error);
-    return null;
+    throw error;
   }
 };
