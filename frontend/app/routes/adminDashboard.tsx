@@ -141,7 +141,7 @@ const AdminDashboard = () => {
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {users.map((user) => (
                 <div
-                  key={user.id}
+                  key={user.user_id}
                   className="flex items-center justify-between py-3"
                 >
                   <div>
