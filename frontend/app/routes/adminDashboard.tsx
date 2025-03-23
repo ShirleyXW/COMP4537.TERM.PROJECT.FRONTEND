@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from "react-router";
+import { redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { fetchAdmin } from "~/lib/admin";
 import { Users } from "lucide-react";
 import { DashboardHeader } from "components/DashboardHeader";
@@ -20,7 +20,7 @@ interface User {
   remaining_requests: number;
 }
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     const admin = await fetchAdmin();
     const users: User[] = [];

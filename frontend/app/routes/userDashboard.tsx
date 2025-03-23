@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { redirect, useLoaderData } from "react-router";
+import { redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Users } from "lucide-react";
 import { fetchUser, fetchApiKeys } from "~/lib/userDashboard";
 import { APIContainer } from "components/APITable";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     const user = await fetchUser();
     return { user };
@@ -30,8 +30,6 @@ export const loader = async () => {
 const UserDashboard = () => {
   const { user } = useLoaderData<typeof loader>();
 
-  // if (loading) return <p>Loading...</p>;
-  // if (!user) return <p>User not found</p>;
   const [apiKeys, setApiKeys] = useState([]);
   
   useEffect(() => {
