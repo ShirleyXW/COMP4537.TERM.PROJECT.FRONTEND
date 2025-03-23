@@ -14,10 +14,9 @@ export const fetchUser = async (): Promise<User> => {
     try {
         const response = await axios.get(`${API_BASE_URL}/users/me`, {
             withCredentials: true,
-            
         });
 
-        return response.data
+        return response.data as User
         
     } catch (error) {
         console.error("Error fetching user:", error);
