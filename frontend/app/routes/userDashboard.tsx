@@ -69,7 +69,7 @@ const UserDashboard = () => {
     console.log("apiKeys updated:", apiKeys);
   }, [apiKeys]);
 
-  if (loading) {
+  if (loading || !user) {
     return <LoadingSpinner />;
   }
 

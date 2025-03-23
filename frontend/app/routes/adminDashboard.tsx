@@ -67,7 +67,7 @@ const AdminDashboard = () => {
     fetchData();
   }, [navigate]);
 
-  if (loading) {
+  if (loading || !admin) {
     return <LoadingSpinner />;
   }
 
