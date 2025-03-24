@@ -75,7 +75,7 @@ const AdminDashboard = () => {
     <div className="p-6">
       <DashboardHeader title="Admin Dashboard" isAdmin={true}/>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div className="gap-6 mt-6">
         {/* Admin Information Card */}
         <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
           <CardHeader className="flex justify-between items-center">
@@ -106,27 +106,13 @@ const AdminDashboard = () => {
             </p>
           </CardContent>
         </Card>
-
-        {/* Remaining Requests Card */}
-        <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
-          <CardHeader className="flex justify-between items-center">
-            <div>
-              <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                Remaining Requests
-              </CardTitle>
-              <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
-                API usage status
-              </CardDescription>
-            </div>
-          </CardHeader>
-        </Card>
       </div>
 
-      {/* User AP Monitoring */}
+      {/* User API Monitoring */}
       <Card className="mt-6 p-6 rounded-lg shadow-lg  dark:bg-gray-900 dark:text-gray-100">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-            User AP Monitoring
+            User API Monitoring
           </CardTitle>
           <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
             Monitor user API consumption.
