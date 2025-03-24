@@ -24,11 +24,12 @@ import {
 
 import type { User } from "~/lib/userDashboard";
 import type { Admin } from "~/lib/admin";
+import { fetchUserBreakdown } from "~/lib/adminDashboard";
 
 interface UserStats {
   username: string,
   email: string,
-  token?: string,
+  token?: string[],
   totalRequests: number
 }
 
@@ -38,27 +39,17 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [userStats, setUserStats] = useState<UserStats[]>([
-    {
-      username: "Jaohn23",
-      email: "john@john.xyp",
-      token: "jsdfjtr#524$",
-      totalRequests: 143
-    },
-    {
-      username: "tom45",
-      email: "tom@tom.io",
-      token: "uytewyu$e",
-      totalRequests: 12
-    }
-  ]);
+  const [userStats, setUserStats] = useState<UserStats[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const adminData = await fetchAdmin();
         setAdmin(adminData);
-        setUsers([]);
+        // setUsers([]);
+        const data = await fetchUserBreakdown();
+        setUserStats(data);
+
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const status_code = error.response?.status;
