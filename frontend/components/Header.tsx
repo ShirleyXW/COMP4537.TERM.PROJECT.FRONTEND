@@ -43,7 +43,7 @@ export function Header() {
                             <h1 className="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">Smart Lighting Powered by AI —</h1>
                             <p className="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
                                 {text.split("").map((char, index) => (
-                                    <AnimatePresence>
+                                    <AnimatePresence key={index}> 
                                         <motion.span key={index} custom={index} variants={textVariants} initial="hidden" animate="visible">
                                             {char}
                                         </motion.span>
