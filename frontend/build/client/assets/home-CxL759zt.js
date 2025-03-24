@@ -1,0 +1,1 @@
+import{w as t}from"./with-props-GgHiePyh.js";import{n as e}from"./chunk-K6CSEXPM-DcZlbQav.js";const m=({})=>[{title:"New React Router App"},{name:"description",content:"Welcome to React Router!"}],o=()=>e.jsx("div",{children:"HOME"}),s=t(o);export{s as default,m as meta};
