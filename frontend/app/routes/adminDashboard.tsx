@@ -13,20 +13,23 @@ import {
 } from "@/components/ui/card";
 import axios from "axios";
 import toast from "react-hot-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
-interface Admin {
-  user_id: number;
-  email: string;
-  username: string;
-  is_admin: boolean;
-}
+import type { User } from "~/lib/userDashboard";
+import type { Admin } from "~/lib/admin";
 
-interface User {
-  user_id: number;
-  username: string;
-  email: string;
-  consumedAP: number;
-  remaining_requests: number;
+interface UserStats {
+  username: string,
+  email: string,
+  token?: string,
+  totalRequests: number
 }
 
 const AdminDashboard = () => {
@@ -34,6 +37,21 @@ const AdminDashboard = () => {
   const [admin, setAdmin] = useState<Admin>();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const [userStats, setUserStats] = useState<UserStats[]>([
+    {
+      username: "Jaohn23",
+      email: "john@john.xyp",
+      token: "jsdfjtr#524$",
+      totalRequests: 143
+    },
+    {
+      username: "tom45",
+      email: "tom@tom.io",
+      token: "uytewyu$e",
+      totalRequests: 12
+    }
+  ]);
 
   useEffect(() => {
     async function fetchData() {
@@ -108,45 +126,58 @@ const AdminDashboard = () => {
         </Card>
       </div>
 
-      {/* User API Monitoring */}
-      <Card className="mt-6 p-6 rounded-lg shadow-lg  dark:bg-gray-900 dark:text-gray-100">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-            User API Monitoring
-          </CardTitle>
-          <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
-            Monitor user API consumption.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {users.length === 0 ? (
-            <div className="text-gray-500 dark:text-gray-400">
-              No user data available.
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {users.map((user) => (
-                <div
-                  key={user.user_id}
-                  className="flex items-center justify-between py-3"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {user.username}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {user.email}
-                    </p>
-                  </div>
-                  <div className="text-sm font-medium text-rose-600 dark:text-rose-400">
-                    {user.consumedAP} AP
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <div className="mt-20">
+        <h1 className="text-2xl font-bold text-gray-500">Stats for each endpoints</h1>
+        <Table className="mt-3">
+            <TableHeader className="bg-gradient-to-b from-rose-100 to-rose-150">
+              <TableRow>
+                <TableHead className="text-gray-600">Method</TableHead>
+                <TableHead className="text-gray-600">Endpoint</TableHead>
+                <TableHead className="text-gray-600">Requests</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="fonr-medium">PUT</TableCell>
+                <TableCell className="font-medium">hardcoded/endpoint/</TableCell>
+                <TableCell className="font-medium">78(hardcoded number)</TableCell>
+              </TableRow>
+            </TableBody>
+        </Table>
+      </div>
+
+      <div className="mt-20">
+        <h1 className="text-2xl font-bold text-gray-500">Breakdown of API usages per user</h1>
+        <Table className="mt-3">
+            <TableHeader className="bg-gradient-to-b from-rose-100 to-rose-150">
+              <TableRow>
+                <TableHead className="text-gray-600">User Name</TableHead>
+                <TableHead className="text-gray-600">Email</TableHead>
+                <TableHead className="text-gray-600">Token / API Key</TableHead>
+                <TableHead className="text-gray-600">Total # Requests</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {userStats.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    No user data available
+                  </TableCell>
+                </TableRow>
+              ) : (
+                userStats.map((user, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell className="">{user.username}</TableCell>
+                    <TableCell className="font-medium">{user.email}</TableCell>
+                    <TableCell className="font-medium">{user.token ?? "—"}</TableCell>
+                    <TableCell className="font-medium">{user.totalRequests}</TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+        </Table>
+      </div>
+
     </div>
   );
 };

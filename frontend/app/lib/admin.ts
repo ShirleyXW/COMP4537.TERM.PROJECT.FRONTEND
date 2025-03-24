@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
 
-interface Admin {
+export interface Admin {
   user_id: number;
   email: string;
   username: string;
