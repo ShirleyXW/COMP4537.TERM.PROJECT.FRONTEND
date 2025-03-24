@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
 
 export const login = async (prevState: string | null, formData: FormData) => {
     // Convert FormData to URLSearchParams for FastAPI OAuth2 compatibility
@@ -23,17 +23,27 @@ export const login = async (prevState: string | null, formData: FormData) => {
             }
         });
 
-        if (res.data.status === 200) {
+        if (res.status === 200) {
             // Return a success flag that the component can use to navigate
-            return { success: true };
+            return res.data;
         }
         
         return null;
     } catch (error: any) {
         console.error(error);
         if (error.response?.data?.detail) {
-            return error.response.data.detail;
+            return {"message": `${error.response.data.detail}`, "success": false};
         }
-        return "Login failed. Please try again.";
+        return {"message": "Login failed. Please try again.", "success": false};
     }  
+}
+
+export async function logout() {
+  try {
+    await axios.delete(`${API_BASE_URL}/auth/token`, { withCredentials: true });
+    console.log("Logout successful");
+  } catch (error) {
+    console.error("Logout failed:", error);
+    throw error;
+  }
 }
