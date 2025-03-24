@@ -25,6 +25,7 @@ import {
 import type { User } from "~/lib/userDashboard";
 import type { Admin } from "~/lib/admin";
 import { fetchUserBreakdown } from "~/lib/adminDashboard";
+import { KeyRound } from "lucide-react"
 
 interface UserStats {
   username: string,
@@ -160,7 +161,16 @@ const AdminDashboard = () => {
                   <TableRow key={idx}>
                     <TableCell className="">{user.username}</TableCell>
                     <TableCell className="font-medium">{user.email}</TableCell>
-                    <TableCell className="font-medium">{user.token ?? "—"}</TableCell>
+                    <TableCell className="font-medium whitespace-normal">
+                    {user.token?.length ? (
+                      user.token.map((keyString, i) => (
+                        <li className="list-none flex items-start gap-2" key={i}>
+                          <KeyRound className="h-4 w-4 text-rose-300" />
+                          <span>{keyString}</span>
+                        </li>
+                      ))
+                    ) : ("")}
+                    </TableCell>
                     <TableCell className="font-medium">{user.totalRequests}</TableCell>
                   </TableRow>
                 ))
