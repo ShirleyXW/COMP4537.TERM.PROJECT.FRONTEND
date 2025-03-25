@@ -4,7 +4,6 @@ import { User } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FiLogOut } from "react-icons/fi";
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -62,6 +61,27 @@ export function DashboardHeader({ title = "Dashboard", userImage, isAdmin = fals
                         </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                            onClick={() =>
+                                navigate(`/${isAdmin ? "adminDashboard" : "userDashboard"}`)
+                            }
+                        >
+                            <div className="w-full h-fit flex justify-center items-center gap-3">
+                                <p className="font-bold text-blue-500">Dashboard</p>
+                                <p className="text-blue-500">
+                                    <FiLogOut className="text-blue-500 font-bold" />
+                                </p>
+                            </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate("/lumisenseai")}>
+                            <div className="w-full h-fit flex justify-center items-center gap-3">
+                                <p className="font-bold text-blue-500">Lumi Sense AI</p>
+                                <p className="text-blue-500">
+                                    <FiLogOut className="text-blue-500 font-bold" />
+                                </p>
+                            </div>
+                        </DropdownMenuItem>
+
                         <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut}>
                             <div className="w-full h-fit flex justify-center items-center gap-3">
                                 <p className="font-bold text-blue-500">LOGOUT</p>
