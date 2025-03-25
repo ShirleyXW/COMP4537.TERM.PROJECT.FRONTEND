@@ -23,7 +23,10 @@ const LumiSenseAI = () => {
         <div className="w-full min-h-screen flex flex-col max-h-screen">
             <h1 className="text-3xl font-bold text-center">Lumi Sense AI</h1>
             <div className="w-full grid md:grid-cols-2 gap-10 gap-y-5 md:px-10 mt-35">
-                <Card className="hover-click-animation" onClick={() => navigate("/")}>
+                <Card
+                    className="hover-click-animation"
+                    onClick={() => navigate("/lumisenseai/connect")}
+                >
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
@@ -36,7 +39,10 @@ const LumiSenseAI = () => {
                         </p>
                     </div>
                 </Card>
-                <Card className="hover-click-animation" onClick={() => navigate("/")}>
+                <Card
+                    className="hover-click-animation"
+                    onClick={() => navigate("/lumisenseai/control")}
+                >
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
