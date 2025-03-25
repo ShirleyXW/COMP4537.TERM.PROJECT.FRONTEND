@@ -3,6 +3,8 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import _ from "lodash";
+
 import {
     Card,
     CardContent,
@@ -25,8 +27,8 @@ const mockDeviceData = [
     {
         device: "F0:72:D6:94:C1:86:73:2A",
         model: "H6046",
-        deviceName: "RGBIC TV Light Bars",
-        controllable: true,
+        deviceName: "RGBIC TV Light Bars2",
+        controllable: false,
         properties: { colorTem: { range: { min: 2000, max: 9000 } } },
         retrievable: true,
         supportCmds: ["turn", "brightness", "color", "colorTem"],
@@ -34,7 +36,7 @@ const mockDeviceData = [
     {
         device: "F0:72:D6:94:C1:86:73:2A",
         model: "H6046",
-        deviceName: "RGBIC TV Light Bars",
+        deviceName: "RGBIC TV Light Bars3",
         controllable: true,
         properties: { colorTem: { range: { min: 2000, max: 9000 } } },
         retrievable: true,
@@ -60,6 +62,9 @@ const connect = () => {
     const handleChange = () => {
         setIsAPIVerified(false);
         setAPIKey("");
+    };
+    const handleFinalSelect = () => {
+        window.localStorage.setItem("selectedDevice", JSON.stringify(selectedDevice));
     };
     return (
         <div className="w-full">
@@ -98,35 +103,54 @@ const connect = () => {
                 <h2 className="text-2xl font-bold">
                     Select One of Your Device That You Want to Control
                 </h2>
-                <div className="mt-7 gap-5 grid md:grid-cols-2">
-                    {mockDeviceData.map((device, idx) => {
-                        return (
-                            <Card
-                                key={idx}
-                                className="hover-click-animation"
-                                onClick={() => setSelectedDevice(device)}
-                            >
-                                <CardHeader>
-                                    <CardTitle>{`${device.deviceName} (${device.model})`}</CardTitle>
-                                    <CardDescription>{`${device.device}`}</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div>
-                                        <div className="flex max-w-lg gap-2">
-                                            <p>Supported: </p>
-                                            <p>{`${device.controllable ? "YES" : "NO"}`}</p>
+                <div className="mt-7 ">
+                    <div className="gap-5 grid md:grid-cols-2">
+                        {mockDeviceData.map((device, idx) => {
+                            return (
+                                <Card
+                                    key={idx}
+                                    className={`hover-click-animation ${_.isEqual(device, selectedDevice) && "bg-red-200"} ${!device.controllable && "cursor-not-allowed"}`}
+                                    onClick={() => {
+                                        if (device.controllable)
+                                            setSelectedDevice((prev: any) => {
+                                                if (!_.isEqual(device, selectedDevice))
+                                                    return device;
+                                                if (!prev) return device;
+                                                else return null;
+                                            });
+                                    }}
+                                >
+                                    <CardHeader>
+                                        <CardTitle>{`${device.deviceName} (${device.model})`}</CardTitle>
+                                        <CardDescription>{`${device.device}`}</CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div>
+                                            <div className="flex max-w-lg gap-2">
+                                                <p>Supported: </p>
+                                                <p>{`${device.controllable ? "YES" : "NO"}`}</p>
+                                            </div>
+                                            <div className="flex max-w-lg gap-2">
+                                                <p>Possible Action: </p>
+                                                {device.supportCmds.map((cmd, idx) => {
+                                                    return <p key={`${cmd}_${idx}`}>{cmd}</p>;
+                                                })}
+                                            </div>
                                         </div>
-                                        <div className="flex max-w-lg gap-2">
-                                            <p>Possible Action: </p>
-                                            {device.supportCmds.map((cmd, idx) => {
-                                                return <p key={`${cmd}_${idx}`}>{cmd}</p>;
-                                            })}
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        );
-                    })}
+                                    </CardContent>
+                                </Card>
+                            );
+                        })}
+                    </div>
+                    <div className="mt-10">
+                        <Button
+                            className={`h-15 w-full bg-custom-purple hover:bg-custom-purple hover-click-animation font-bold text-2xl text-custom-gray`}
+                            disabled={!selectedDevice}
+                            onClick={handleFinalSelect}
+                        >
+                            Select
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
