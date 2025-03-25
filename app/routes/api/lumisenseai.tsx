@@ -46,7 +46,7 @@ const LumiSenseAI = () => {
             <h1 className="text-3xl font-bold text-center">Lumi Sense AI</h1>
             {selectedDevice && (
                 <div className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5">
-                    <h2>Currently Selected: </h2>
+                    <h2 className="text-xl font-semibold">You're currently connected to:</h2>
                     <div className="w-full">
                         <Card>
                             <CardHeader>
@@ -57,7 +57,11 @@ const LumiSenseAI = () => {
                                 <div>
                                     <div className="flex max-w-lg gap-2">
                                         <p>Supported: </p>
-                                        <p>{`${selectedDevice.controllable ? "YES" : "NO"}`}</p>
+                                        <p>
+                                            {selectedDevice.controllable
+                                                ? "Yes, ready to control!"
+                                                : "Not controllable at the moment."}
+                                        </p>
                                     </div>
                                     <div className="flex max-w-lg gap-2">
                                         <p>Possible Action: </p>
@@ -81,9 +85,11 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Connect Device</CardTitle>
+                                <CardTitle>Connect a Device</CardTitle>
                             </CardHeader>
-                            <CardContent>Connect device you want to use</CardContent>
+                            <CardContent>
+                                Tap here to select a smart lamp you'd like to use.
+                            </CardContent>
                         </div>
                         <p className="mr-10">
                             <MdAddLink size={50} />
@@ -100,9 +106,11 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>DisConnect Device</CardTitle>
+                                <CardTitle>Disconnect Device</CardTitle>
                             </CardHeader>
-                            <CardContent>Disconnect device you want to use</CardContent>
+                            <CardContent>
+                                Not this one? Tap to remove the connected device.
+                            </CardContent>
                         </div>
                         <p className="mr-10">
                             <MdLinkOff size={50} />
@@ -116,9 +124,11 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Control Device</CardTitle>
+                                <CardTitle>Control Your Lamp</CardTitle>
                             </CardHeader>
-                            <CardContent>Control your device</CardContent>
+                            <CardContent>
+                                Customize brightness, color, and more in real time!
+                            </CardContent>
                         </div>
                         <p className="mr-10">
                             <MdLightbulb
