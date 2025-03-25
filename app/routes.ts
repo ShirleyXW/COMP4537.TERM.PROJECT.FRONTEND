@@ -6,5 +6,5 @@ export default [
     route("info", "routes/info.tsx"),
     route("userDashboard", "routes/userDashboard.tsx"),
     route("login", "routes/login.tsx"),
-    route("api-key-check", "routes/APIKeyCheck.tsx"),
+    route("lumisenseai", "routes/api/lumisenseai.tsx"),
 ] satisfies RouteConfig;
