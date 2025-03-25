@@ -1,6 +1,4 @@
 import APIKeyCheck from "components/APIKeyCheckForm";
-import { FaRegLightbulb } from "react-icons/fa";
-import { LuLampDesk } from "react-icons/lu";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import {
@@ -12,6 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
+import { motion, AnimatePresence } from "framer-motion";
 
 import "./animation.css";
 import { Separator } from "@/components/ui/separator";
@@ -39,43 +38,62 @@ const LumiSenseAI = () => {
         }, INTERVAL);
         return () => clearInterval(interval);
     }, []);
-
+    const [isClosing, setIsClosing] = useState(false);
+    const handleDisconnect = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            localStorage.removeItem("selectedDevice");
+            setSelectedDevice(null);
+            setIsClosing(false);
+        }, 500);
+    };
     if (!isKeyChecked) return <APIKeyCheck />;
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
             <h1 className="text-3xl font-bold text-center">Lumi Sense AI</h1>
-            {selectedDevice && (
-                <div className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5">
-                    <h2 className="text-xl font-semibold">You're currently connected to:</h2>
-                    <div className="w-full">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>{`${selectedDevice.deviceName} (${selectedDevice.model})`}</CardTitle>
-                                <CardDescription>{`${selectedDevice.device}`}</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div>
-                                    <div className="flex max-w-lg gap-2">
-                                        <p>Supported: </p>
-                                        <p>
-                                            {selectedDevice.controllable
-                                                ? "Yes, ready to control!"
-                                                : "Not controllable at the moment."}
-                                        </p>
+            <AnimatePresence>
+                {selectedDevice && (
+                    <motion.div
+                        className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5"
+                        key="device-card"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <h2 className="text-xl font-semibold">You're currently connected to:</h2>
+                        <div className="w-full">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>{`${selectedDevice.deviceName} (${selectedDevice.model})`}</CardTitle>
+                                    <CardDescription>{`${selectedDevice.device}`}</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div>
+                                        <div className="flex max-w-lg gap-2">
+                                            <p>Supported: </p>
+                                            <p>
+                                                {selectedDevice.controllable
+                                                    ? "Yes, ready to control!"
+                                                    : "Not controllable at the moment."}
+                                            </p>
+                                        </div>
+                                        <div className="flex max-w-lg gap-2">
+                                            <p>Possible Action: </p>
+                                            {selectedDevice.supportCmds.map(
+                                                (cmd: any, idx: number) => {
+                                                    return <p key={`${cmd}_${idx}`}>{cmd}</p>;
+                                                }
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="flex max-w-lg gap-2">
-                                        <p>Possible Action: </p>
-                                        {selectedDevice.supportCmds.map((cmd: any, idx: number) => {
-                                            return <p key={`${cmd}_${idx}`}>{cmd}</p>;
-                                        })}
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-                    <Separator className="mt-10" />
-                </div>
-            )}
+                                </CardContent>
+                            </Card>
+                        </div>
+                        <Separator className="mt-10" />
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="w-full grid md:grid-cols-2 gap-10 gap-y-5 md:px-10 mt-10">
                 <Card
@@ -100,6 +118,7 @@ const LumiSenseAI = () => {
                     className="hover-click-animation"
                     onClick={() => {
                         window.localStorage.removeItem("selectedDevice");
+                        handleDisconnect();
                         setSelectedDevice(null);
                     }}
                 >
