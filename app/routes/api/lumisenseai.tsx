@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/card";
 import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
+// import { Toaster } from "@/components/ui/sonner";
+// import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 
 import "./animation.css";
 import { Separator } from "@/components/ui/separator";
@@ -50,11 +53,13 @@ const LumiSenseAI = () => {
     if (!isKeyChecked) return <APIKeyCheck />;
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
+            <Toaster />
             <h1 className="text-3xl font-bold text-center">Lumi Sense AI</h1>
             <AnimatePresence>
                 {selectedDevice && (
                     <motion.div
                         className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5"
+                        layout
                         key="device-card"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -95,7 +100,7 @@ const LumiSenseAI = () => {
                 )}
             </AnimatePresence>
 
-            <div className="w-full grid md:grid-cols-2 gap-10 gap-y-5 md:px-10 mt-10">
+            <motion.div layout className="w-full grid md:grid-cols-2 gap-10 gap-y-5 md:px-10 mt-10">
                 <Card
                     className="hover-click-animation"
                     onClick={() => navigate("/lumisenseai/connect")}
@@ -119,6 +124,10 @@ const LumiSenseAI = () => {
                     onClick={() => {
                         window.localStorage.removeItem("selectedDevice");
                         handleDisconnect();
+                        toast.success("Disconnected!", {
+                            description: "Your lamp successfully disconnected.",
+                            duration: 1500,
+                        });
                         setSelectedDevice(null);
                     }}
                 >
@@ -138,7 +147,16 @@ const LumiSenseAI = () => {
                 </Card>
                 <Card
                     className="hover-click-animation md:col-span-2"
-                    onClick={() => navigate("/lumisenseai/control")}
+                    onClick={() => {
+                        if (!selectedDevice) {
+                            toast.error("Lamp Not Selected!", {
+                                description: "Select your lamp to control it.",
+                                duration: 1000,
+                            });
+                            return;
+                        }
+                        navigate("/lumisenseai/control");
+                    }}
                 >
                     <div className="flex justify-between items-center gap-5">
                         <div>
@@ -157,7 +175,7 @@ const LumiSenseAI = () => {
                         </p>
                     </div>
                 </Card>
-            </div>
+            </motion.div>
         </div>
     );
 };
