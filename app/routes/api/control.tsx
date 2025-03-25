@@ -28,6 +28,7 @@ import { MdBrightness6, MdColorLens, MdAutoAwesome } from "react-icons/md";
 
 import "./animation.css";
 import AISuggestionDialog from "./AISuggestionDialog";
+import ColorPickerDialog from "./ColorPickerDialog";
 
 const control = () => {
     const navigate = useNavigate();
@@ -85,28 +86,22 @@ const control = () => {
 
                         <Separator className="mt-10" />
                         <div className="grid md:grid-cols-2 gap-x-10 gap-y-5 w-full">
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Card className="hover-click-animation w-full">
-                                        <div className="flex justify-between items-center gap-5 w-full">
-                                            <div>
-                                                <CardHeader>
-                                                    <CardTitle>Turn On / Off</CardTitle>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    Toggle the power of your lamp with a single tap.
-                                                </CardContent>
-                                            </div>
-                                            <p className="mr-10">
-                                                <HiOutlineLightBulb size={50} />
-                                            </p>
-                                        </div>
-                                    </Card>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
-                                    <AISuggestionDialog />
-                                </AlertDialogContent>
-                            </AlertDialog>
+                            <Card className="hover-click-animation w-full">
+                                <div className="flex justify-between items-center gap-5 w-full">
+                                    <div>
+                                        <CardHeader>
+                                            <CardTitle>Turn On / Off</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            Toggle the power of your lamp with a single tap.
+                                        </CardContent>
+                                    </div>
+                                    <p className="mr-10">
+                                        <HiOutlineLightBulb size={50} />
+                                    </p>
+                                </div>
+                            </Card>
+
                             <Card className="hover-click-animation w-full">
                                 <div className="flex justify-between items-center gap-5 w-full">
                                     <div>
@@ -122,37 +117,52 @@ const control = () => {
                                     </p>
                                 </div>
                             </Card>
-                            <Card className="hover-click-animation w-full">
-                                <div className="flex justify-between items-center gap-5 w-full">
-                                    <div>
-                                        <CardHeader>
-                                            <CardTitle>Pick a Color</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            Set your lamp’s color to match your mood or style.
-                                        </CardContent>
-                                    </div>
-                                    <p className="mr-10">
-                                        <MdColorLens size={50} />
-                                    </p>
-                                </div>
-                            </Card>
-                            <Card className="hover-click-animation w-full">
-                                <div className="flex justify-between items-center gap-5 w-full">
-                                    <div>
-                                        <CardHeader>
-                                            <CardTitle>AI Color Suggestion</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            Let AI suggest the best light color for your current
-                                            vibe.
-                                        </CardContent>
-                                    </div>
-                                    <p className="mr-10">
-                                        <MdAutoAwesome size={50} />
-                                    </p>
-                                </div>
-                            </Card>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Card className="hover-click-animation w-full">
+                                        <div className="flex justify-between items-center gap-5 w-full">
+                                            <div>
+                                                <CardHeader>
+                                                    <CardTitle>Pick a Color</CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    Set your lamp’s color to match your mood or
+                                                    style.
+                                                </CardContent>
+                                            </div>
+                                            <p className="mr-10">
+                                                <MdColorLens size={50} />
+                                            </p>
+                                        </div>
+                                    </Card>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
+                                    <ColorPickerDialog />
+                                </AlertDialogContent>
+                            </AlertDialog>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Card className="hover-click-animation w-full">
+                                        <div className="flex justify-between items-center gap-5 w-full">
+                                            <div>
+                                                <CardHeader>
+                                                    <CardTitle>AI Color Suggestion</CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    Let AI suggest the best light color for your
+                                                    current vibe.
+                                                </CardContent>
+                                            </div>
+                                            <p className="mr-10">
+                                                <MdAutoAwesome size={50} />
+                                            </p>
+                                        </div>
+                                    </Card>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
+                                    <AISuggestionDialog />
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </div>
                     </div>
                 )}
