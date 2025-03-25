@@ -9,21 +9,26 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router";
-
+import { Toaster, toast } from "sonner";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { RiLightbulbLine } from "react-icons/ri";
 
-import {
-    MdPowerSettingsNew,
-    MdBrightness6,
-    MdColorLens,
-    MdAutoAwesome,
-    MdPsychology,
-    MdBrightnessMedium,
-} from "react-icons/md";
+import { MdBrightness6, MdColorLens, MdAutoAwesome } from "react-icons/md";
 
 import "./animation.css";
+import AISuggestionDialog from "./AISuggestionDialog";
+
 const control = () => {
     const navigate = useNavigate();
 
@@ -32,11 +37,19 @@ const control = () => {
         const storedDevice = localStorage.getItem("selectedDevice");
         if (storedDevice) {
             setSelectedDevice(JSON.parse(storedDevice));
+        } else {
+            toast.error("Device Not Selected", {
+                description: "Device is not selected. You are redirected to device selection page.",
+                duration: 1500,
+            });
+            navigate("/lumisenseai");
         }
     }, []);
 
     return (
         <div className="w-full min-h-screen">
+            <Toaster />
+
             <div className="w-full flex-flex-col">
                 {selectedDevice && (
                     <div className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5">
@@ -69,23 +82,31 @@ const control = () => {
                                 </CardContent>
                             </Card>
                         </div>
+
                         <Separator className="mt-10" />
                         <div className="grid md:grid-cols-2 gap-x-10 gap-y-5 w-full">
-                            <Card className="hover-click-animation w-full">
-                                <div className="flex justify-between items-center gap-5 w-full">
-                                    <div>
-                                        <CardHeader>
-                                            <CardTitle>Turn On / Off</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            Toggle the power of your lamp with a single tap.
-                                        </CardContent>
-                                    </div>
-                                    <p className="mr-10">
-                                        <HiOutlineLightBulb size={50} />
-                                    </p>
-                                </div>
-                            </Card>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Card className="hover-click-animation w-full">
+                                        <div className="flex justify-between items-center gap-5 w-full">
+                                            <div>
+                                                <CardHeader>
+                                                    <CardTitle>Turn On / Off</CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    Toggle the power of your lamp with a single tap.
+                                                </CardContent>
+                                            </div>
+                                            <p className="mr-10">
+                                                <HiOutlineLightBulb size={50} />
+                                            </p>
+                                        </div>
+                                    </Card>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
+                                    <AISuggestionDialog />
+                                </AlertDialogContent>
+                            </AlertDialog>
                             <Card className="hover-click-animation w-full">
                                 <div className="flex justify-between items-center gap-5 w-full">
                                     <div>
