@@ -11,19 +11,33 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
 
 import "./animation.css";
-
+import { Separator } from "@/components/ui/separator";
+const INTERVAL = 2000;
+const COLOR_CLASS = [
+    "text-custom-gray",
+    "text-custom-purple",
+    "text-custom-pink",
+    "text-custom-blue",
+    "text-custom-coral-pink",
+];
 const LumiSenseAI = () => {
     const navigate = useNavigate();
     const [isKeyChecked, setIsKeyChecked] = useState(true);
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
+    const [colorIndex, setColorIndex] = useState(0);
 
     useEffect(() => {
         const storedDevice = localStorage.getItem("selectedDevice");
         if (storedDevice) {
             setSelectedDevice(JSON.parse(storedDevice));
         }
+        const interval = setInterval(() => {
+            setColorIndex((prev) => (prev + 1) % COLOR_CLASS.length);
+        }, INTERVAL);
+        return () => clearInterval(interval);
     }, []);
 
     if (!isKeyChecked) return <APIKeyCheck />;
@@ -55,9 +69,11 @@ const LumiSenseAI = () => {
                             </CardContent>
                         </Card>
                     </div>
+                    <Separator className="mt-10" />
                 </div>
             )}
-            <div className="w-full grid md:grid-cols-2 gap-10 gap-y-5 md:px-10 mt-35">
+
+            <div className="w-full grid md:grid-cols-2 gap-10 gap-y-5 md:px-10 mt-10">
                 <Card
                     className="hover-click-animation"
                     onClick={() => navigate("/lumisenseai/connect")}
@@ -70,12 +86,31 @@ const LumiSenseAI = () => {
                             <CardContent>Connect device you want to use</CardContent>
                         </div>
                         <p className="mr-10">
-                            <LuLampDesk size={50} />
+                            <MdAddLink size={50} />
                         </p>
                     </div>
                 </Card>
                 <Card
                     className="hover-click-animation"
+                    onClick={() => {
+                        window.localStorage.removeItem("selectedDevice");
+                        setSelectedDevice(null);
+                    }}
+                >
+                    <div className="flex justify-between items-center gap-5">
+                        <div>
+                            <CardHeader>
+                                <CardTitle>DisConnect Device</CardTitle>
+                            </CardHeader>
+                            <CardContent>Disconnect device you want to use</CardContent>
+                        </div>
+                        <p className="mr-10">
+                            <MdLinkOff size={50} />
+                        </p>
+                    </div>
+                </Card>
+                <Card
+                    className="hover-click-animation md:col-span-2"
                     onClick={() => navigate("/lumisenseai/control")}
                 >
                     <div className="flex justify-between items-center gap-5">
@@ -86,7 +121,10 @@ const LumiSenseAI = () => {
                             <CardContent>Control your device</CardContent>
                         </div>
                         <p className="mr-10">
-                            <FaRegLightbulb size={50} />
+                            <MdLightbulb
+                                size={50}
+                                className={`transition-colors duration-1000 ease-in-out ${COLOR_CLASS[colorIndex]}`}
+                            />
                         </p>
                     </div>
                 </Card>
