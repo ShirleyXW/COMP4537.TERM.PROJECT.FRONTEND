@@ -29,6 +29,7 @@ import { MdBrightness6, MdColorLens, MdAutoAwesome } from "react-icons/md";
 import "./animation.css";
 import AISuggestionDialog from "./AISuggestionDialog";
 import ColorPickerDialog from "./ColorPickerDialog";
+import BrightnessDialog from "./BrightnessDialoig";
 
 const control = () => {
     const navigate = useNavigate();
@@ -101,22 +102,31 @@ const control = () => {
                                     </p>
                                 </div>
                             </Card>
-
-                            <Card className="hover-click-animation w-full">
-                                <div className="flex justify-between items-center gap-5 w-full">
-                                    <div>
-                                        <CardHeader>
-                                            <CardTitle>Adjust Brightness</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            Slide to brighten or dim your lamp as needed.
-                                        </CardContent>
-                                    </div>
-                                    <p className="mr-10">
-                                        <MdBrightness6 size={50} />
-                                    </p>
-                                </div>
-                            </Card>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Card className="hover-click-animation w-full">
+                                        <div className="flex justify-between items-center gap-5 w-full">
+                                            <div>
+                                                <CardHeader>
+                                                    <CardTitle>Adjust Brightness</CardTitle>
+                                                </CardHeader>
+                                                <CardContent>
+                                                    Slide to brighten or dim your lamp as needed.
+                                                </CardContent>
+                                            </div>
+                                            <p className="mr-10">
+                                                <MdBrightness6 size={50} />
+                                            </p>
+                                        </div>
+                                    </Card>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
+                                    <BrightnessDialog
+                                        min={selectedDevice.properties.colorTem.range.min}
+                                        max={selectedDevice.properties.colorTem.range.max}
+                                    />
+                                </AlertDialogContent>
+                            </AlertDialog>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Card className="hover-click-animation w-full">
