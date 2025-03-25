@@ -80,7 +80,9 @@ const connect = () => {
             <div className="flex flex-col gap-10 w-full">
                 <div className="grid w-full items-center gap-1.5">
                     <Label htmlFor="api-key">
-                        {isAPIVerified ? "Your API Key registered" : "Enter your device API key"}
+                        {isAPIVerified
+                            ? "Your Govee API key has been registered!"
+                            : "Please enter your device's API key to get started"}
                     </Label>
                     <div className="flex gap-5 w-full">
                         <div className="flex flex-col flex-grow gap-3">
@@ -97,18 +99,18 @@ const connect = () => {
                                 />
                             )}
                             {isEmptyAPIKey && (
-                                <p className="text-sm text-red-500 ml-1">API Key is required</p>
+                                <p className="text-sm text-red-500 ml-1">
+                                    Oops! Please enter your API key.
+                                </p>
                             )}
                         </div>
                         <Button onClick={isAPIVerified ? handleChange : handleSubmit}>
-                            {isAPIVerified ? "Change" : "Submit"}
+                            {isAPIVerified ? "Change Key" : "Verify Key"}
                         </Button>
                     </div>
                 </div>
                 <Separator />
-                <h2 className="text-2xl font-bold">
-                    Select One of Your Device That You Want to Control
-                </h2>
+                <h2 className="text-2xl font-bold">Pick a device you’d like to control</h2>
                 <div className="mt-7 ">
                     <div className="gap-5 grid md:grid-cols-2">
                         {mockDeviceData.map((device, idx) => {
@@ -134,7 +136,11 @@ const connect = () => {
                                         <div>
                                             <div className="flex max-w-lg gap-2">
                                                 <p>Supported: </p>
-                                                <p>{`${device.controllable ? "YES" : "NO"}`}</p>
+                                                <p>
+                                                    {device.controllable
+                                                        ? "Yes, ready to go!"
+                                                        : "No, not available for control"}
+                                                </p>
                                             </div>
                                             <div className="flex max-w-lg gap-2">
                                                 <p>Possible Action: </p>
@@ -154,7 +160,7 @@ const connect = () => {
                             disabled={!selectedDevice}
                             onClick={handleFinalSelect}
                         >
-                            Select
+                            Connect This Device
                         </Button>
                     </div>
                 </div>
