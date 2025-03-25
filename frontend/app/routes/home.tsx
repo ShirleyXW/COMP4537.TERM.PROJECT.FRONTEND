@@ -7,10 +7,7 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "components/LoadingSpinner";
 
 export const meta = ({}: Route.MetaArgs) => {
-    return [
-        { title: "Lumisenseai" },
-        { name: "description", content: "Welcome to React Router!" },
-    ];
+    return [{ title: "Lumisenseai" }, { name: "description", content: "Welcome to React Router!" }];
 };
 
 const Home = () => {
@@ -22,7 +19,7 @@ const Home = () => {
         const checkRedirect = async () => {
             try {
                 const isAdminData = await getIsAdmin();
-                setIsAdmin(isAdminData)
+                setIsAdmin(isAdminData);
 
                 if (isAdminData) {
                     navigate("/adminDashboard");
@@ -34,19 +31,19 @@ const Home = () => {
             } finally {
                 setLoading(false);
             }
-        }
+        };
         checkRedirect();
-    }, [navigate])
+    }, [navigate]);
 
     if (loading) {
-        return <LoadingSpinner />
+        return <LoadingSpinner />;
     }
 
     return (
-    <>
-    <Header />
-    </>
-);
+        <>
+            <Header />
+        </>
+    );
 };
 
 export default Home;
