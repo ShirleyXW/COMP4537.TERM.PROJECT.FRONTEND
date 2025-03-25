@@ -3,6 +3,8 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useNavigate } from "react-router";
+
 import _ from "lodash";
 
 import {
@@ -45,6 +47,8 @@ const mockDeviceData = [
 ];
 
 const connect = () => {
+    const navigate = useNavigate();
+
     const [isAPIVerified, setIsAPIVerified] = useState(false);
     const [APIKey, setAPIKey] = useState("");
     const [devices, setDevices] = useState(null);
@@ -64,14 +68,16 @@ const connect = () => {
         setAPIKey("");
     };
     const handleFinalSelect = () => {
-        window.localStorage.setItem("selectedDevice", JSON.stringify(selectedDevice));
+        try {
+            window.localStorage.setItem("selectedDevice", JSON.stringify(selectedDevice));
+            navigate("/lumisenseai");
+        } catch (error) {
+            console.error("Error during storing selected device: ", error);
+        }
     };
     return (
         <div className="w-full">
             <div className="flex flex-col gap-10 w-full">
-                {/* <h1 className="text-3xl font-bold">
-                    {isAPIVerified ? "Your API Key registered" : "Enter your device API key"}
-                </h1> */}
                 <div className="grid w-full items-center gap-1.5">
                     <Label htmlFor="api-key">
                         {isAPIVerified ? "Your API Key registered" : "Enter your device API key"}
