@@ -16,6 +16,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import "./animation.css";
+import { DashboardHeader } from "components/DashboardHeader";
 const mockDeviceData = [
     {
         device: "F0:72:D6:94:C1:86:73:2A",
@@ -76,8 +77,9 @@ const connect = () => {
         }
     };
     return (
-        <div className="w-full">
-            <div className="flex flex-col gap-10 w-full">
+        <div className="w-full pb-10">
+            <DashboardHeader title="Lumi Sense AI" />
+            <div className="flex flex-col gap-10 w-full mt-10">
                 <div className="grid w-full items-center gap-1.5">
                     <Label htmlFor="api-key">
                         {isAPIVerified

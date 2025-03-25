@@ -30,6 +30,7 @@ import "./animation.css";
 import AISuggestionDialog from "./AISuggestionDialog";
 import ColorPickerDialog from "./ColorPickerDialog";
 import BrightnessDialog from "./BrightnessDialoig";
+import { DashboardHeader } from "components/DashboardHeader";
 
 const control = () => {
     const navigate = useNavigate();
@@ -49,7 +50,8 @@ const control = () => {
     }, []);
 
     return (
-        <div className="w-full min-h-screen">
+        <div className="w-full min-h-screen pb-10">
+            <DashboardHeader title="Lumi Sense AI" />
             <Toaster />
 
             <div className="w-full flex-flex-col">
