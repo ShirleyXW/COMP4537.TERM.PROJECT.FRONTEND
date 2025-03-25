@@ -1,0 +1,1 @@
+import{w as a}from"./with-props-GgHiePyh.js";import{a as s,n as t}from"./chunk-K6CSEXPM-DcZlbQav.js";const r=()=>{const[o,e]=s.useState(null),[n,d]=s.useState(!0),[i,c]=s.useState("");return t.jsxs("section",{children:[t.jsx("h1",{children:"Dashboard"}),t.jsx("p",{children:"Remaining API calls"})]})},p=a(r);export{p as default};
