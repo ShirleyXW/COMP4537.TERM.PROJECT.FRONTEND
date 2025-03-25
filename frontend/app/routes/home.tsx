@@ -1,3 +1,4 @@
+import { Button } from "~/components/ui/button";
 import type { Route } from "./+types/home";
 import { Header } from "../../components/Header";
 import { getIsAdmin } from "~/lib/admin";
