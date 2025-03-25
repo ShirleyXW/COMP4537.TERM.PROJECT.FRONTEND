@@ -35,7 +35,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 <Links />
             </head>
             <body>
-                <main className="max-w-[1024px] mx-auto px-5">
+                <main className="max-w-[1024px] mx-auto ">
                     <Toaster />
                     {children}
                     <ScrollRestoration />

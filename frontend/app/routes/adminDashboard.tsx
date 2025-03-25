@@ -75,10 +75,10 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="px-6 pb-6">
+        <div className="pb-6">
             <DashboardHeader title="Admin Dashboard" isAdmin={true} />
 
-            <div className="gap-6 mt-6">
+            <div className="gap-6 mt-6 px-6">
                 {/* Admin Information Card */}
                 <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
                     <CardHeader className="flex justify-between items-center">
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
                 </Card>
             </div>
 
-            <div className="mt-20">
+            <div className="mt-20 px-6">
                 <h1 className="text-2xl font-bold text-gray-500">Stats for each endpoints</h1>
                 <Table className="mt-3">
                     <TableHeader className="bg-gradient-to-b from-rose-100 to-rose-150">
@@ -129,7 +129,7 @@ const AdminDashboard = () => {
                 </Table>
             </div>
 
-            <div className="mt-20">
+            <div className="mt-20 px-6">
                 <h1 className="text-2xl font-bold text-gray-500">
                     Breakdown of API usages per user
                 </h1>

@@ -95,10 +95,10 @@ const UserDashboard = () => {
     }
 
     return (
-        <div className="px-6 pb-6">
+        <div className="pb-6">
             <DashboardHeader title="User Dashboard" />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 {/* User Information Card */}
                 <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
                     <CardHeader className="flex justify-between items-center">
@@ -153,7 +153,7 @@ const UserDashboard = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 bg-red-100">
+            <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 bg-red-100">
                 {apiKeys.length > 0 && (
                     <APIContainer initialData={apiKeys} onStatusUpdate={handleApiKeyStatusChange} />
                 )}
