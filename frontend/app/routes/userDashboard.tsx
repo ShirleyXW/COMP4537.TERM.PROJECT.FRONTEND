@@ -132,8 +132,8 @@ const UserDashboard = () => {
                 <Card className="p-6 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100">
                     <CardHeader className="flex justify-between items-center">
                         <div>
-                            <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                                Remaining Requests
+                            <CardTitle className="font-semibold text-gray-900 dark:text-white">
+                                # of Requests / Request Limit
                             </CardTitle>
                             <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
                                 API usage status
@@ -145,10 +145,7 @@ const UserDashboard = () => {
                     </CardHeader>
                     <CardContent className="">
                         <p className="text-4xl font-bold text-green-600 dark:text-green-400 ">
-                            {usage?.remaining_requests ?? "--"}
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                            You have requested {usage?.total_used ?? "--"} times so far
+                            {usage?.total_used} / {usage?.remaining_requests ?? "--"}
                         </p>
                     </CardContent>
                 </Card>
