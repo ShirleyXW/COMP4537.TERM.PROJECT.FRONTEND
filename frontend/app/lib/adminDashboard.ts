@@ -10,6 +10,12 @@ export interface UserBreakdown {
     totalRequests: number;
 }
 
+export interface EndpointBreakdown {
+    method: string;
+    endpoint: string;
+    totalRequests: number;
+}
+
 export const fetchUserBreakdown = async (): Promise<UserBreakdown[]> => {
     const res = await axios.get(`${API_BASE_URL}/admin/user-breakdown`, {
         withCredentials: true, 
@@ -17,3 +23,10 @@ export const fetchUserBreakdown = async (): Promise<UserBreakdown[]> => {
 
     return res.data.data;
 };
+
+export const fetchEndpointBreakdown = async (): Promise<EndpointBreakdown[]> => {
+    const res = await axios.get(`${API_BASE_URL}/admin/stats/endpoint-breakdown`, {
+        withCredentials: true,
+    })
+    return res.data.data;
+} 

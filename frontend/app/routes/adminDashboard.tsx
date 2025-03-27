@@ -18,14 +18,20 @@ import {
 
 import type { User } from "~/lib/userDashboard";
 import type { Admin } from "~/lib/admin";
-import { fetchUserBreakdown } from "~/lib/adminDashboard";
+import { fetchUserBreakdown, fetchEndpointBreakdown } from "~/lib/adminDashboard";
 import { KeyRound } from "lucide-react";
 
 interface UserStats {
-    username: string;
-    email: string;
-    token?: string[];
-    totalRequests: number;
+  username: string;
+  email: string;
+  token?: string[];
+  totalRequests: number;
+}
+
+interface EndpointStats {
+  method: string;
+  endpoint: string;
+  totalRequests: number;
 }
 
 const AdminDashboard = () => {
@@ -35,6 +41,7 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const [userStats, setUserStats] = useState<UserStats[]>([]);
+    const [endpointStats, setEndpointStats] = useState<EndpointStats[]>([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -44,6 +51,10 @@ const AdminDashboard = () => {
                 // setUsers([]);
                 const data = await fetchUserBreakdown();
                 setUserStats(data);
+
+                // endpoint stats
+                const endpointData = await fetchEndpointBreakdown();
+                setEndpointStats(endpointData);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     const status_code = error.response?.status;
@@ -120,11 +131,21 @@ const AdminDashboard = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="fonr-medium">PUT</TableCell>
-                            <TableCell className="font-medium">hardcoded/endpoint/</TableCell>
-                            <TableCell className="font-medium">78(hardcoded number)</TableCell>
-                        </TableRow>
+                      {endpointStats.length === 0 ? (
+                          <TableRow>
+                              <TableCell colSpan={3} className="text-center">
+                                  No endpoint stats available
+                              </TableCell>
+                          </TableRow>
+                      ) : (
+                          endpointStats.map((stat, index) => (
+                              <TableRow key={index}>
+                                  <TableCell>{stat.method}</TableCell>
+                                  <TableCell>{stat.endpoint}</TableCell>
+                                  <TableCell>{stat.totalRequests}</TableCell>
+                              </TableRow>
+                          ))
+                      )}
                     </TableBody>
                 </Table>
             </div>
