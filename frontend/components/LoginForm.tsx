@@ -13,6 +13,7 @@ import { useActionState } from "react"
 import { login } from "@/lib/auth"
 import { useEffect } from "react"
 import { useNavigate } from "react-router"
+import { messages } from "~/lang/login/en"
 
 export function LoginForm({
   className,
@@ -41,16 +42,16 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">{messages.loginTitle}</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            {messages.loginDescription}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={formAction}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{messages.emailLabel}</Label>
                 <Input
                   id="email"
                   name="email"
@@ -61,13 +62,13 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
+                  <Label htmlFor="password">{messages.passwordLabel}</Label>
+                  {/* <a
                     href="#"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </a> */}
                 </div>
                 <Input id="password" name="password" type="password" required />
               </div>
@@ -75,13 +76,13 @@ export function LoginForm({
                 <div className="text-sm text-red-500">{errorMessage}</div>
               )}
               <Button type="submit" disabled={pending} className="w-full">
-                {pending ? "Logging in..." : "Login"}
+                {pending ? `${messages.loggingInButton}` : `${messages.loginButton}`}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
+              {messages.noAccount}{" "}
               <a href="register" className="underline underline-offset-4">
-                Sign up
+                {messages.signUp}
               </a>
             </div>
           </form>
