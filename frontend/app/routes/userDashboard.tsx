@@ -15,7 +15,8 @@ import { ui, messages } from "~/lang/user_dashboard/en"
 
 export type APITable = {
     key: string;
-    status: "active" | "deactive" | "pending";
+    key_name: string;
+    status: "active" | "inactive" | "pending";
     action: {
         toggleStatus: string;
         deleteKey: number;
@@ -55,37 +56,23 @@ const UserDashboard = () => {
     }, [navigate]);
 
     useEffect(() => {
-        const savedApiKeys = localStorage.getItem("apiKeys");
-        if (savedApiKeys) {
-            setApiKeys(JSON.parse(savedApiKeys));
-        } else {
-            const fetchKeys = async () => {
-                if (!user) return;
-                console.log(messages.fetchingKey);
-                try {
-                    const keys = await fetchApiKeys(user.user_id);
-                    setApiKeys(keys);
-                } catch (error) {
-                    console.error(messages.fetchKeysError);
-                }
-            };
-            fetchKeys();
-        }
+        const fetchKeys = async () => {
+          if (!user) return;
+          console.log(messages.fetchingKey);
+          try {
+            const keys = await fetchApiKeys(user.user_id);
+            const formattedKeys = keys.map((key) => ({
+                ...key,
+                status: key.status as "active" | "inactive" | "pending",
+            }));
+            setApiKeys(formattedKeys);
+          } catch (error) {
+            console.error(messages.fetchKeysError);
+          }
+        };
+        fetchKeys();
+        
     }, [user]);
-
-    useEffect(() => {
-        console.log("apiKeys updated:", apiKeys);
-        if (apiKeys.length > 0) {
-            localStorage.setItem("apiKeys", JSON.stringify(apiKeys));
-        }
-    }, [apiKeys]);
-
-    useEffect(() => {
-        const savedApiKeys = localStorage.getItem("apiKeys");
-        if (savedApiKeys) {
-            setApiKeys(JSON.parse(savedApiKeys));
-        }
-    }, []);
 
     const handleApiKeyStatusChange = async (updatedData: APITable[]) => {
         setApiKeys(updatedData);
@@ -151,9 +138,11 @@ const UserDashboard = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div className="px-6 grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
                 {apiKeys.length > 0 && (
-                    <APIContainer initialData={apiKeys} onStatusUpdate={handleApiKeyStatusChange} />
+                    <div className="col-span-3">
+                    <APIContainer initialData={apiKeys} userId={user.user_id} onStatusUpdate={handleApiKeyStatusChange} />
+                    </div>
                 )}
                 {user && <APIGenerate userId={user.user_id} setApiKeys={setApiKeys} />}
             </div>
