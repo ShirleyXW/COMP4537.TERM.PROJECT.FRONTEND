@@ -11,6 +11,7 @@ import LoadingSpinner from "components/LoadingSpinner";
 import toast from "react-hot-toast";
 import { fetchUserUsage } from "~/lib/userDashboard";
 import type { UserUsage, User } from "~/lib/userDashboard";
+import { ui, messages } from "~/lang/user_dashboard/en"
 
 export type APITable = {
     key: string;
@@ -40,7 +41,7 @@ const UserDashboard = () => {
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response?.status === 401) {
                     toast.error(
-                        "Authentication error: Your session has expired. Please log in again."
+                        (messages.authError)
                     );
                     navigate("/");
                     return;
@@ -60,12 +61,12 @@ const UserDashboard = () => {
         } else {
             const fetchKeys = async () => {
                 if (!user) return;
-                console.log("fetching keys");
+                console.log(messages.fetchingKey);
                 try {
                     const keys = await fetchApiKeys(user.user_id);
                     setApiKeys(keys);
                 } catch (error) {
-                    console.error("Failed to fetch keys");
+                    console.error(messages.fetchKeysError);
                 }
             };
             fetchKeys();
@@ -96,7 +97,7 @@ const UserDashboard = () => {
 
     return (
         <div className="pb-6">
-            <DashboardHeader title="User Dashboard" />
+            <DashboardHeader title={ui.dashboardHeader} />
 
             <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 {/* User Information Card */}
@@ -104,10 +105,10 @@ const UserDashboard = () => {
                     <CardHeader className="flex justify-between items-center">
                         <div>
                             <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                                User Information
+                                {ui.userInfoTitle}
                             </CardTitle>
                             <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
-                                Account details
+                                {ui.userInfoDescription}
                             </CardDescription>
                         </div>
                         <div className="bg-blue-100 dark:bg-blue-800 p-3 rounded-full">
@@ -116,14 +117,14 @@ const UserDashboard = () => {
                     </CardHeader>
                     <CardContent className="mt-4">
                         <p className="text-gray-700 dark:text-gray-300">
-                            <span className="font-medium text-gray-900 dark:text-white">Name:</span>{" "}
-                            {user?.username || "N/A"}
+                            <span className="font-medium text-gray-900 dark:text-white">{ui.nameLabel}</span>{" "}
+                            {user?.username || ui.notApplicable}
                         </p>
                         <p className="text-gray-700 dark:text-gray-300">
                             <span className="font-medium text-gray-900 dark:text-white">
-                                Email:
+                                {ui.emailLabel}
                             </span>{" "}
-                            {user?.email || "N/A"}
+                            {user?.email || ui.notApplicable}
                         </p>
                     </CardContent>
                 </Card>
@@ -133,10 +134,10 @@ const UserDashboard = () => {
                     <CardHeader className="flex justify-between items-center">
                         <div>
                             <CardTitle className="font-semibold text-gray-900 dark:text-white">
-                                # of Requests / Request Limit
+                                {ui.usageTitle}
                             </CardTitle>
                             <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
-                                API usage status
+                                {ui.usageDescription}
                             </CardDescription>
                         </div>
                         <div className="bg-yellow-100 dark:bg-blue-800 p-3 rounded-full">
