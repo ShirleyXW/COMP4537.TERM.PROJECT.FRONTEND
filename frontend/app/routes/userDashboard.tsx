@@ -150,7 +150,7 @@ const UserDashboard = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 bg-red-100">
+            <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 {apiKeys.length > 0 && (
                     <APIContainer initialData={apiKeys} onStatusUpdate={handleApiKeyStatusChange} />
                 )}
