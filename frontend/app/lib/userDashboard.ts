@@ -48,7 +48,6 @@ export const fetchApiKeys = async (user_id:number) => {
             }
         }
     ));
-        console.log("API Table:", apiTable);
         return apiTable;
     } catch (error) {
         console.error("Error fetching API keys:", error);
