@@ -9,6 +9,12 @@ export interface User {
     username: string,
     is_admin: boolean,
 }
+interface APIKey {
+    id: number;
+    key: string;
+    key_name: string;
+    active: boolean;
+}
 
 export const fetchUser = async (): Promise<User> => {
 
@@ -31,16 +37,18 @@ export const fetchApiKeys = async (user_id:number) => {
             withCredentials: true,
         });
 
-        const result = response.data.key;
-        const apiTable = result.map((key: string) => ({
-            key,
-            status: "active",
+        const result:APIKey[] = response.data.keys;
+        const apiTable = result.map((keyObject) => ({
+            key: keyObject.key,
+            key_name: keyObject.key_name,
+            status: keyObject.active ? "active" : "inactive",
             action: {
                 toggleStatus: "Toggle Status",
                 deleteKey: user_id,
             }
-        }));
-    
+        }
+    ));
+        console.log("API Table:", apiTable);
         return apiTable;
     } catch (error) {
         console.error("Error fetching API keys:", error);
