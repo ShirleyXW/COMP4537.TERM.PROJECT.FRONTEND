@@ -13,14 +13,14 @@ export const getApiUrl = (endpoint: string): string => {
   return `${API_BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 };
 
-export const generateApiKey = async (user_id: number) => {
+export const generateApiKey = async (user_id: number, key_name: string) => {
   try {
     const res = await fetch(getApiUrl('/api/generate'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: user_id }),
+      body: JSON.stringify({ id: user_id , key_name: key_name }),
       credentials: 'include',
     });
     const result = await res.json();
@@ -48,6 +48,27 @@ export const deleteKey = async (key: string, id:number) => {
     const result = await res.json();
     if (res.ok) {
       return { success: true, message: result.message || 'API key deleted' };
+    }
+    return { success: false, error: result.message || 'Unknown error' };
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
+export const updateKeyStatus = async (key: string, current_status:string,id:number) => {
+  try {
+    const res = await fetch(getApiUrl(`/api/update-key-activation`), {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user_id: id, key: key, current_status: current_status }),
+    });
+    const result = await res.json();
+    if (res.ok) {
+      return { success: true, message: result.message || 'API key status updated' };
     }
     return { success: false, error: result.message || 'Unknown error' };
   }
