@@ -22,19 +22,30 @@ import {
 
 import { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
-import { deleteKey } from "@/lib/api";
+import { deleteKey, updateKeyStatus } from "@/lib/api";
 import type { APITable } from "~/routes/userDashboard";
 
-export function APIContainer({ initialData , onStatusUpdate }: { initialData: APITable[], onStatusUpdate:(updatedData: APITable[]) => void }) {
+
+export function APIContainer({ initialData, userId, onStatusUpdate }: { initialData: APITable[], userId: number , onStatusUpdate:(updatedData: APITable[]) => void }) {
     const [data, setData] = useState<APITable[]>(initialData);
 
-    const switchStatus = (row: APITable) => {
-        const newStatus = row.status === "active" ? "deactive" as "deactive": "active" as "active";
-        const updatedData = data.map((item) =>
-            item.key === row.key ? { ...item, status: newStatus } : item
-        );
-        setData(updatedData);
-        onStatusUpdate(updatedData);
+    const switchStatus = async (row: APITable) => {
+        try {
+            const change_status = await updateKeyStatus(row.key, row.status, userId);
+            if (change_status?.success) {
+                // Update the status in the local state
+                const newStatus = row.status === "active" ? "inactive" as "inactive": "active" as "active";
+                const updatedData = data.map((item) =>
+                    item.key === row.key ? { ...item, status: newStatus } : item
+                );
+                setData(updatedData);
+                onStatusUpdate(updatedData);
+            }   else {  
+                console.error("Failed to update status:", change_status?.error);
+            }
+        }catch (error) {
+            console.error("Failed to update status:", error);
+        }
 
     };
     const handleApiDelete = async (key: string, deleteKeyId: number) => {
@@ -43,7 +54,7 @@ export function APIContainer({ initialData , onStatusUpdate }: { initialData: AP
             if (result?.success) {
                 setData((prevData) => {
                     const updatedApiKeys = prevData.filter((item) => item.key !== key);
-                    localStorage.setItem("apiKeys", JSON.stringify(updatedApiKeys));
+                    // localStorage.setItem("apiKeys", JSON.stringify(updatedApiKeys));
                     return updatedApiKeys;
                 }
             );
@@ -68,6 +79,7 @@ export function APIContainer({ initialData , onStatusUpdate }: { initialData: AP
                 <TableHeader>
                     <TableRow>
                         <TableHead>Key</TableHead>
+                        <TableHead>Key Name</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Action</TableHead>
                     </TableRow>
@@ -76,6 +88,7 @@ export function APIContainer({ initialData , onStatusUpdate }: { initialData: AP
                     {data.map((row) => (
                         <TableRow key={row.key}>
                             <TableCell>{row.key}</TableCell>
+                            <TableCell>{row.key_name}</TableCell>
                             <TableCell>{row.status}</TableCell>
                             <TableCell className="flex flex-row">
                                 <div className="toggle_status_btn text-green-500 mx-2 flex items-center">
