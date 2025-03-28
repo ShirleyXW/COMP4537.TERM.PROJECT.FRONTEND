@@ -139,11 +139,11 @@ const UserDashboard = () => {
                 </Card>
             </div>
             <div className="px-6 grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-                {apiKeys.length > 0 && (
-                    <div className="col-span-3">
+                
+                <div className="col-span-3">
                     <APIContainer initialData={apiKeys} userId={user.user_id} onStatusUpdate={handleApiKeyStatusChange} />
-                    </div>
-                )}
+                </div>
+                
                 {user && <APIGenerate userId={user.user_id} setApiKeys={setApiKeys} />}
             </div>
         </div>

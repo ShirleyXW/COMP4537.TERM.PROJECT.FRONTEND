@@ -84,7 +84,8 @@ export function APIContainer({ initialData, userId, onStatusUpdate }: { initialD
                         <TableHead>Action</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                { data.length>0 && (
+                    <TableBody>
                     {data.map((row) => (
                         <TableRow key={row.key}>
                             <TableCell>{row.key}</TableCell>
@@ -114,7 +115,8 @@ export function APIContainer({ initialData, userId, onStatusUpdate }: { initialD
                             </TableCell>
                         </TableRow>
                     ))}
-                </TableBody>
+                    </TableBody>
+                )}
             </Table>
         </>
     );
