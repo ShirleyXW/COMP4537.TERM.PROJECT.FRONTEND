@@ -1,7 +1,5 @@
 import type { Route } from "./+types/home";
 import { LoginForm } from "components/LoginForm";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
 
 export const meta = ({}: Route.MetaArgs) => {
     return [

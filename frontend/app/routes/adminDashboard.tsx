@@ -16,7 +16,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-import type { User } from "~/lib/userDashboard";
+import type { User } from "~/lib/user";
 import type { Admin } from "~/lib/admin";
 import { fetchUserBreakdown, fetchEndpointBreakdown } from "~/lib/adminDashboard";
 import { KeyRound } from "lucide-react";

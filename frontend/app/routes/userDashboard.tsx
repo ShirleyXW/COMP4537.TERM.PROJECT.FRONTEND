@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Users, Lightbulb } from "lucide-react";
-import { fetchUser, fetchApiKeys } from "~/lib/userDashboard";
+import { fetchApiKeys } from "~/lib/userDashboard";
+import { fetchUser } from "~/lib/user";
 import { APIContainer } from "components/APITable";
 import { APIGenerate } from "components/APIGenerate";
 import { DashboardHeader } from "components/DashboardHeader";
@@ -10,7 +11,8 @@ import axios from "axios";
 import LoadingSpinner from "components/LoadingSpinner";
 import toast from "react-hot-toast";
 import { fetchUserUsage } from "~/lib/userDashboard";
-import type { UserUsage, User } from "~/lib/userDashboard";
+import type { UserUsage } from "~/lib/userDashboard";
+import type { User } from "~/lib/user";
 import { ui, messages } from "~/lang/user_dashboard/en"
 
 export type APITable = {

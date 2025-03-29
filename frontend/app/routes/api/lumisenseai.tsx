@@ -14,7 +14,8 @@ import { motion, AnimatePresence } from "framer-motion";
 // import { Toaster } from "@/components/ui/sonner";
 // import { toast } from "sonner";
 import { Toaster, toast } from "sonner";
-
+import { useAuth } from "~/hooks/useAuth";
+import LoadingSpinner from "components/LoadingSpinner";
 import "./animation.css";
 import { Separator } from "@/components/ui/separator";
 import { DashboardHeader } from "components/DashboardHeader";
@@ -27,6 +28,7 @@ const COLOR_CLASS = [
     "text-custom-coral-pink",
 ];
 const LumiSenseAI = () => {
+    const { userId, loading } = useAuth();
     const navigate = useNavigate();
     const [isKeyChecked, setIsKeyChecked] = useState(true);
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
@@ -51,6 +53,7 @@ const LumiSenseAI = () => {
             setIsClosing(false);
         }, 500);
     };
+    if (loading) return <LoadingSpinner />
     if (!isKeyChecked) return <APIKeyCheck />;
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
