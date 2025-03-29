@@ -31,8 +31,11 @@ import AISuggestionDialog from "./AISuggestionDialog";
 import ColorPickerDialog from "./ColorPickerDialog";
 import BrightnessDialog from "./BrightnessDialoig";
 import { DashboardHeader } from "components/DashboardHeader";
+import { useAuth } from "~/hooks/useAuth";
+import LoadingSpinner from "components/LoadingSpinner";
 
 const control = () => {
+    const { userId, loading } = useAuth();
     const navigate = useNavigate();
 
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
@@ -48,6 +51,8 @@ const control = () => {
             navigate("/lumisenseai");
         }
     }, []);
+
+    if (loading) return <LoadingSpinner />
 
     return (
         <div className="w-full min-h-screen pb-10">

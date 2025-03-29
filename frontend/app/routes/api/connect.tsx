@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router";
+import { useAuth } from "~/hooks/useAuth";
+import LoadingSpinner from "components/LoadingSpinner";
 
 import _ from "lodash";
 
@@ -48,6 +50,7 @@ const mockDeviceData = [
 ];
 
 const connect = () => {
+    const { userId, loading } = useAuth();
     const navigate = useNavigate();
 
     const [isAPIVerified, setIsAPIVerified] = useState(false);
@@ -76,6 +79,7 @@ const connect = () => {
             console.error("Error during storing selected device: ", error);
         }
     };
+    if(loading) return <LoadingSpinner />
     return (
         <div className="w-full pb-10">
             <DashboardHeader title="Lumi Sense AI" />
