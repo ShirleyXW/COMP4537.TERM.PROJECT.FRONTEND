@@ -77,6 +77,7 @@ const connect = () => {
             setIsEmptyAPIKey(true);
             return;
         }
+        window.localStorage.setItem("goveeKey", APIKey);
         fetchDevice();
     };
     const handleChange = () => {

@@ -1,18 +1,10 @@
 import APIKeyCheck from "~/routes/lumisenseAIAPIKeyCheck";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
-import { API_BASE_URL } from "~/lib/api";
 import { Toaster, toast } from "sonner";
 import { useAuth } from "~/hooks/useAuth";
 import LoadingSpinner from "components/LoadingSpinner";
