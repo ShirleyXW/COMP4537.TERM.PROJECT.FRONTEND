@@ -14,7 +14,9 @@ import { use, useState } from "react";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { API_BASE_URL } from "~/lib/api";
+import ReactDOM from "react-dom";
+import AIResultDialog from "./AIResultDialog";
 const EMOTION = [
     {
         title: "HAPPY",
@@ -58,27 +60,50 @@ const EMOTION = [
         emoji: "🎈",
     },
 ];
-const AISuggestionDialog = () => {
+import LoadingSpinner from "components/LoadingSpinner";
+
+interface AISuggestionDialogProps {
+    goveeKey: string;
+    device: any;
+}
+const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, device }) => {
     const [selectedEmotion, setSelectedEmotion] = useState("");
+    const [AIResult, setAIResult] = useState<any>(null);
     const handleEmotionCardClick = (title: string) => {
         setSelectedEmotion(title);
     };
-    const [additionalRequest, setAdditionalRequest] = useState("");
-    const [useLocation, setUseLocation] = useState<boolean>(false);
-    const createRequestBody = () => {
-        const body = {};
-        if (useLocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const { latitude, longitude } = position.coords;
-                console.log(latitude, longitude);
+    const [isLoading, setIsLoading] = useState(false);
+    const setColorByAI = async (emotion: string) => {
+        setIsLoading(true);
+        console.log("REQUEST");
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const time = `${hours}:${minutes}`;
+        const addReq = additionalRequest.length == 0 ? null : additionalRequest;
+        const response = await fetch(`${API_BASE_URL}/lumisenseai/set-color-by-ai`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                goveeKey: goveeKey.trim(),
+                device: device,
+                emotion: emotion,
+                time: time,
+                addReq: addReq,
             }),
-                (error: any) => {
-                    console.log(error);
-                };
+        });
+        if (!response.ok) {
+            console.error("Failed to fetch device: ", response.status);
         }
-        console.log(selectedEmotion);
-        console.log(useLocation);
+        const result = await response.json();
+        setAIResult(result.data);
+        console.log(result);
+        setIsLoading(false);
     };
+    const [additionalRequest, setAdditionalRequest] = useState("");
+    if (AIResult) return <AIResultDialog data={AIResult} setAIResult={setAIResult} />;
     return (
         <div className="w-full space-y-4 px-4 py-2">
             <AlertDialogHeader className="w-full">
@@ -111,28 +136,30 @@ const AISuggestionDialog = () => {
                                 onChange={(e) => setAdditionalRequest(e.target.value)}
                             />
                         </div>
-                        <div className="mt-5 flex gap-3 justify-between items-center">
-                            <Checkbox
-                                id="weather"
-                                checked={useLocation}
-                                onCheckedChange={(checked) => {
-                                    setUseLocation(checked === true);
-                                    console.log(useLocation);
-                                }}
-                            />
-                            <label htmlFor="weather">
-                                Use my location to add a little magic to the mood? ✨🌎
-                            </label>
-                        </div>
                     </div>
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="mt-10 ">
                 <div className="w-full flex justify-between">
-                    <Button onClick={createRequestBody}>ASK AI</Button>
+                    <Button
+                        onClick={() => {
+                            setColorByAI(selectedEmotion);
+                        }}
+                    >
+                        ASK AI
+                    </Button>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                 </div>
             </AlertDialogFooter>
+            {isLoading &&
+                ReactDOM.createPortal(
+                    <div className="fixed inset-0 z-[9999] bg-black/30 flex items-center justify-center">
+                        <div className="bg-white rounded-full p-5 shadow-lg">
+                            <div className="animate-spin h-8 w-8 border-4 border-gray-300 border-t-blue-500 rounded-full"></div>
+                        </div>
+                    </div>,
+                    document.body
+                )}
         </div>
     );
 };
