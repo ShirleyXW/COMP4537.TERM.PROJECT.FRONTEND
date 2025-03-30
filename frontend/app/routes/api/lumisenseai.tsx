@@ -1,4 +1,4 @@
-import APIKeyCheck from "components/APIKeyCheckForm";
+import APIKeyCheck from "~/routes/lumisenseAIAPIKeyCheck";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import {
@@ -19,7 +19,6 @@ import LoadingSpinner from "components/LoadingSpinner";
 import "./animation.css";
 import { Separator } from "@/components/ui/separator";
 import { DashboardHeader } from "components/DashboardHeader";
-import { fetchUser } from "~/lib/user";
 const INTERVAL = 2000;
 const COLOR_CLASS = [
     "text-custom-gray",
@@ -29,33 +28,11 @@ const COLOR_CLASS = [
     "text-custom-coral-pink",
 ];
 const LumiSenseAI = () => {
-    const { userId, loading } = useAuth();
+    const { loading } = useAuth();
     const navigate = useNavigate();
-    const [isKeyChecked, setIsKeyChecked] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
     const [colorIndex, setColorIndex] = useState(0);
-    const [APIKeys, setAPIKeys] = useState({});
-    const [isAPIKeyLoading, setIsAPIKeyLoading] = useState(true);
-    const fetchAllAPIKey = async () => {
-        try {
-            const user = await fetchUser();
-            console.log(user);
-            const response = await fetch(`${API_BASE_URL}/api/get-key?user_id=${user.user_id}`);
-            console.log(`${API_BASE_URL}/get-key`);
-            if (!response.ok) {
-                throw new Error("Server didn't respond.");
-            }
-            const data = await response.json();
-            setAPIKeys(data.keys);
-            setIsAPIKeyLoading(false);
-        } catch (error) {
-            console.log("Error during fetching keys: ", error);
-        }
-    };
 
-    useEffect(() => {
-        fetchAllAPIKey();
-    }, []);
     useEffect(() => {
         const storedDevice = localStorage.getItem("selectedDevice");
         if (storedDevice) {
@@ -65,7 +42,8 @@ const LumiSenseAI = () => {
             setColorIndex((prev) => (prev + 1) % COLOR_CLASS.length);
         }, INTERVAL);
         return () => clearInterval(interval);
-    }, [APIKeys]);
+    }, []);
+
     const [isClosing, setIsClosing] = useState(false);
     const handleDisconnect = () => {
         setIsClosing(true);
@@ -76,7 +54,7 @@ const LumiSenseAI = () => {
         }, 500);
     };
     if (loading) return <LoadingSpinner />;
-    if (!isAPIKeyLoading) return <APIKeyCheck keys={APIKeys} />;
+
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
             <DashboardHeader title="Lumi Sense AI" />

@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { fetchUserUsage } from "~/lib/userDashboard";
 import type { UserUsage } from "~/lib/userDashboard";
 import type { User } from "~/lib/user";
-import { ui, messages } from "~/lang/user_dashboard/en"
+import { ui, messages } from "~/lang/user_dashboard/en";
 
 export type APITable = {
     key: string;
@@ -34,7 +34,6 @@ const UserDashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // user infomation
                 const userData: User = await fetchUser();
                 setUser(userData);
 
@@ -43,9 +42,7 @@ const UserDashboard = () => {
                 setUsage(usageData);
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response?.status === 401) {
-                    toast.error(
-                        (messages.authError)
-                    );
+                    toast.error(messages.authError);
                     navigate("/");
                     return;
                 }
@@ -59,21 +56,20 @@ const UserDashboard = () => {
 
     useEffect(() => {
         const fetchKeys = async () => {
-          if (!user) return;
-          console.log(messages.fetchingKey);
-          try {
-            const keys = await fetchApiKeys(user.user_id);
-            const formattedKeys = keys.map((key) => ({
-                ...key,
-                status: key.status as "active" | "inactive" | "pending",
-            }));
-            setApiKeys(formattedKeys);
-          } catch (error) {
-            console.error(messages.fetchKeysError);
-          }
+            if (!user) return;
+            console.log(messages.fetchingKey);
+            try {
+                const keys = await fetchApiKeys(user.user_id);
+                const formattedKeys = keys.map((key) => ({
+                    ...key,
+                    status: key.status as "active" | "inactive" | "pending",
+                }));
+                setApiKeys(formattedKeys);
+            } catch (error) {
+                console.error(messages.fetchKeysError);
+            }
         };
         fetchKeys();
-        
     }, [user]);
 
     const handleApiKeyStatusChange = async (updatedData: APITable[]) => {
@@ -106,7 +102,9 @@ const UserDashboard = () => {
                     </CardHeader>
                     <CardContent className="mt-4">
                         <p className="text-gray-700 dark:text-gray-300">
-                            <span className="font-medium text-gray-900 dark:text-white">{ui.nameLabel}</span>{" "}
+                            <span className="font-medium text-gray-900 dark:text-white">
+                                {ui.nameLabel}
+                            </span>{" "}
                             {user?.username || ui.notApplicable}
                         </p>
                         <p className="text-gray-700 dark:text-gray-300">
@@ -141,11 +139,14 @@ const UserDashboard = () => {
                 </Card>
             </div>
             <div className="px-6 grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-                
                 <div className="col-span-3">
-                    <APIContainer initialData={apiKeys} userId={user.user_id} onStatusUpdate={handleApiKeyStatusChange} />
+                    <APIContainer
+                        initialData={apiKeys}
+                        userId={user.user_id}
+                        onStatusUpdate={handleApiKeyStatusChange}
+                    />
                 </div>
-                
+
                 {user && <APIGenerate userId={user.user_id} setApiKeys={setApiKeys} />}
             </div>
         </div>
