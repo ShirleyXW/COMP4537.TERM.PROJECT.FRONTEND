@@ -32,12 +32,20 @@ const LumiSenseAI = () => {
     const navigate = useNavigate();
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
     const [colorIndex, setColorIndex] = useState(0);
-
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedKey, setSelectedKey] = useState<any>({});
     useEffect(() => {
+        const storedAPIKey = localStorage.getItem("selectedKey");
+        if (!storedAPIKey) {
+            navigate("/lumisenseai/api/key/check");
+            return;
+        }
+        setSelectedKey(JSON.parse(storedAPIKey));
         const storedDevice = localStorage.getItem("selectedDevice");
         if (storedDevice) {
             setSelectedDevice(JSON.parse(storedDevice));
         }
+        setIsLoading(false);
         const interval = setInterval(() => {
             setColorIndex((prev) => (prev + 1) % COLOR_CLASS.length);
         }, INTERVAL);
@@ -53,12 +61,25 @@ const LumiSenseAI = () => {
             setIsClosing(false);
         }, 500);
     };
-    if (loading) return <LoadingSpinner />;
+    if (loading || isLoading) return <LoadingSpinner />;
 
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
             <DashboardHeader title="Lumi Sense AI" />
             <Toaster />
+            <div className="w-full py-5 flex flex-col items-center ">
+                <p>Currently Connected to: </p>
+                <div className=" w-full flex flex-col justify-center items-center">
+                    <div className="flex w-1/2">
+                        <p className="w-1/4">Key Name: </p>
+                        <p>{selectedKey.key_name}</p>
+                    </div>
+                    <div className="flex w-1/2">
+                        <p className="w-1/4">Key: </p>
+                        <p>{selectedKey.key}</p>
+                    </div>
+                </div>
+            </div>
             <AnimatePresence>
                 {selectedDevice && (
                     <motion.div
