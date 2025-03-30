@@ -9,16 +9,10 @@ import LoadingSpinner from "components/LoadingSpinner";
 
 import _ from "lodash";
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import "./animation.css";
 import { DashboardHeader } from "components/DashboardHeader";
+import { API_BASE_URL } from "~/lib/api";
 const mockDeviceData = [
     {
         device: "F0:72:D6:94:C1:86:73:2A",
@@ -55,17 +49,35 @@ const connect = () => {
 
     const [isAPIVerified, setIsAPIVerified] = useState(false);
     const [APIKey, setAPIKey] = useState("");
-    const [devices, setDevices] = useState(null);
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
+    const [devices, setDevices] = useState<any>([]);
     const [isEmptyAPIKey, setIsEmptyAPIKey] = useState(false);
+    const fetchDevice = async () => {
+        const response = await fetch(`${API_BASE_URL}/lumisenseai/get-devices`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                goveeKey: APIKey.trim(),
+            }),
+        });
+        if (!response.ok) {
+            console.error("Failed to fetch device: ", response.status);
+        }
+        const data = await response.json();
+        setDevices(data.data.devices);
+        setIsAPIVerified(true);
+        setAPIKey(APIKey);
+        setIsEmptyAPIKey(false);
+        console.log(data);
+    };
     const handleSubmit = (e: any) => {
         if (APIKey.length <= 0) {
             setIsEmptyAPIKey(true);
             return;
         }
-        setIsAPIVerified(true);
-        setAPIKey(APIKey);
-        setIsEmptyAPIKey(false);
+        fetchDevice();
     };
     const handleChange = () => {
         setIsAPIVerified(false);
@@ -79,7 +91,7 @@ const connect = () => {
             console.error("Error during storing selected device: ", error);
         }
     };
-    if(loading) return <LoadingSpinner />
+    if (loading) return <LoadingSpinner />;
     return (
         <div className="w-full pb-10">
             <DashboardHeader title="Lumi Sense AI" />
@@ -119,46 +131,54 @@ const connect = () => {
                 <h2 className="text-2xl font-bold">Pick a device you’d like to control</h2>
                 <div className="mt-7 ">
                     <div className="gap-5 grid md:grid-cols-2">
-                        {mockDeviceData.map((device, idx) => {
-                            return (
-                                <Card
-                                    key={idx}
-                                    className={`hover-click-animation ${_.isEqual(device, selectedDevice) && "bg-red-200"} ${!device.controllable && "cursor-not-allowed"}`}
-                                    onClick={() => {
-                                        if (device.controllable)
-                                            setSelectedDevice((prev: any) => {
-                                                if (!_.isEqual(device, selectedDevice))
-                                                    return device;
-                                                if (!prev) return device;
-                                                else return null;
-                                            });
-                                    }}
-                                >
-                                    <CardHeader>
-                                        <CardTitle>{`${device.deviceName} (${device.model})`}</CardTitle>
-                                        <CardDescription>{`${device.device}`}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <div>
-                                            <div className="flex max-w-lg gap-2">
-                                                <p>Supported: </p>
-                                                <p>
-                                                    {device.controllable
-                                                        ? "Yes, ready to go!"
-                                                        : "No, not available for control"}
-                                                </p>
+                        {devices.length > 0 ? (
+                            devices.map((device: any, idx: any) => {
+                                return (
+                                    <Card
+                                        key={idx}
+                                        className={`hover-click-animation ${_.isEqual(device, selectedDevice) && "bg-red-200"} ${!device.controllable && "cursor-not-allowed"}`}
+                                        onClick={() => {
+                                            if (device.controllable)
+                                                setSelectedDevice((prev: any) => {
+                                                    if (!_.isEqual(device, selectedDevice))
+                                                        return device;
+                                                    if (!prev) return device;
+                                                    else return null;
+                                                });
+                                        }}
+                                    >
+                                        <CardHeader>
+                                            <CardTitle>{`${device.deviceName} (${device.model})`}</CardTitle>
+                                            <CardDescription>{`${device.device}`}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div>
+                                                <div className="flex max-w-lg gap-2">
+                                                    <p>Supported: </p>
+                                                    <p>
+                                                        {device.controllable
+                                                            ? "Yes, ready to go!"
+                                                            : "No, not available for control"}
+                                                    </p>
+                                                </div>
+                                                <div className="flex max-w-lg gap-2">
+                                                    <p>Possible Action: </p>
+                                                    {device.supportCmds.map(
+                                                        (cmd: any, idx: any) => {
+                                                            return (
+                                                                <p key={`${cmd}_${idx}`}>{cmd}</p>
+                                                            );
+                                                        }
+                                                    )}
+                                                </div>
                                             </div>
-                                            <div className="flex max-w-lg gap-2">
-                                                <p>Possible Action: </p>
-                                                {device.supportCmds.map((cmd, idx) => {
-                                                    return <p key={`${cmd}_${idx}`}>{cmd}</p>;
-                                                })}
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            );
-                        })}
+                                        </CardContent>
+                                    </Card>
+                                );
+                            })
+                        ) : (
+                            <p className="text-lg"> No devices found...</p>
+                        )}
                     </div>
                     <div className="mt-10">
                         <Button
