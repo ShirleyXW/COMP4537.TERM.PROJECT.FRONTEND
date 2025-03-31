@@ -1,3 +1,12 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
+import { useAuth } from "~/hooks/useAuth";
+import { API_BASE_URL } from "~/lib/api";
+import { messages } from "@/lang/api/lumisense_ai_api_key_check/en";
+import { fetchUser } from "~/lib/user";
+
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -6,12 +15,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { useNavigate } from "react-router";
-import { useAuth } from "~/hooks/useAuth";
-
-import { Button } from "@/components/ui/button";
-import { fetchUser } from "~/lib/user";
-import { API_BASE_URL } from "~/lib/api";
 import { Separator } from "@/components/ui/separator";
 import {
     Select,
@@ -20,7 +23,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
 
 const LumisenseAIKeyCheck = () => {
     const { loading } = useAuth();
@@ -57,16 +59,14 @@ const LumisenseAIKeyCheck = () => {
         <div className="bg-custom-gray flex h-screen w-full flex-col items-center justify-center">
             <Card className="w-full max-w-[800px] md:w-3/4">
                 <CardHeader>
-                    <CardTitle>Register API Key</CardTitle>
-                    <CardDescription className="">
-                        Select your API key from below to access the Lumi Sense AI services.
-                    </CardDescription>
+                    <CardTitle>{messages.page.title}</CardTitle>
+                    <CardDescription className="">{messages.page.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form className="flex w-full flex-col items-end gap-5 space-x-2 md:flex-row md:items-center md:gap-0">
                         <Select onValueChange={(value) => setSelectedKey(value)}>
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select API Key you want to use." />
+                                <SelectValue placeholder={messages.page.placeholder} />
                             </SelectTrigger>
                             <SelectContent>
                                 {allKeys.map((key: any) => {
@@ -95,7 +95,7 @@ const LumisenseAIKeyCheck = () => {
                                 navigate("/lumisenseai");
                             }}
                         >
-                            Select
+                            {messages.page.select}
                         </Button>
                     </form>
                 </CardContent>
@@ -103,17 +103,15 @@ const LumisenseAIKeyCheck = () => {
                 <CardFooter>
                     <div className="flex w-full flex-col items-end gap-5">
                         <div className="flex w-full flex-col items-end">
-                            <p className="text-muted-foreground text-sm">
-                                Don’t have an API key yet?
-                            </p>
-                            <Button variant="link">
-                                <p>Create one here</p>
-                            </Button>
-                        </div>
-                        <div className="flex w-full flex-col items-end">
-                            <p className="text-muted-foreground text-sm">Forgot your API key?</p>
-                            <Button variant="link" className="text-[#F472B6]">
-                                <p>Recover it here</p>
+                            <p className="text-muted-foreground text-sm">{messages.footer.noKey}</p>
+                            <Button
+                                variant="link"
+                                className="text-custom-pink"
+                                onClick={() => {
+                                    navigate("/userDashboard");
+                                }}
+                            >
+                                <p>{messages.footer.createKey}</p>
                             </Button>
                         </div>
                     </div>

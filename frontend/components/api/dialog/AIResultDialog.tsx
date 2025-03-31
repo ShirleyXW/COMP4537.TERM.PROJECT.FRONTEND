@@ -1,14 +1,10 @@
-import { Button } from "~/components/ui/button";
 import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
     AlertDialogHeader,
-    AlertDialogTitle,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { messages } from "@/lang/api/dialog/AIResultDialog/en";
 // @ts-ignore
 import namer from "color-namer";
 
@@ -25,12 +21,10 @@ const AIResultDialog: React.FC<AIResultDialogProps> = ({ data, setAIResult }) =>
             <AlertDialogHeader className="w-full">
                 <AlertDialogDescription>
                     <div className="flex flex-col w-full justify-center items-center">
-                        <h2 className="font-bold text-2xl">
-                            Here’s a little light magic for you ✨
-                        </h2>
+                        <h2 className="font-bold text-2xl">{messages.magicTitle}</h2>
 
                         <div className="w-full mt-7 flex flex-col items-center">
-                            <h3 className="font-bold text-xl mb-5">Your Mood Color</h3>
+                            <h3 className="font-bold text-xl mb-5">{messages.moodColorTitle}</h3>
                             <div className="w-full flex justify-center flex-col items-center">
                                 <div
                                     className={`w-[100px] h-[100px] border-2 rounded-lg flex justify-center border-custom-gray items-center shadow-lg`}
@@ -43,13 +37,15 @@ const AIResultDialog: React.FC<AIResultDialogProps> = ({ data, setAIResult }) =>
                         </div>
                         <div className="mt-5 w-full">
                             <p className="font-bold">
-                                Why this color?<span className="ml-2">🧚</span>
+                                {messages.whyThisColor}
+                                <span className="ml-2">{messages.whyThisColorEmoji}</span>
                             </p>
                             <p>{data.reason}</p>
                         </div>
                         <div className="mt-5 w-full">
                             <p className="font-bold">
-                                A soft whisper from the AI...<span className="ml-2">💭</span>
+                                {messages.aiWhisper}
+                                <span className="ml-2">{messages.aiWhisperEmoji}</span>
                             </p>
                             <p>{data.advice}</p>
                         </div>
@@ -58,7 +54,9 @@ const AIResultDialog: React.FC<AIResultDialogProps> = ({ data, setAIResult }) =>
             </AlertDialogHeader>
             <AlertDialogFooter className="mt-10 ">
                 <div className="w-full flex justify-between">
-                    <AlertDialogCancel onClick={() => setAIResult(null)}>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel onClick={() => setAIResult(null)}>
+                        {messages.cancelButton}
+                    </AlertDialogCancel>
                 </div>
             </AlertDialogFooter>
         </div>

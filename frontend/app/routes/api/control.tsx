@@ -1,35 +1,19 @@
 import { useEffect, useState } from "react";
+import { messages } from "@/lang/api/control/en";
 import { Separator } from "~/components/ui/separator";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router";
 import { Toaster, toast } from "sonner";
-import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { HiOutlineLightBulb } from "react-icons/hi";
-import { RiLightbulbLine } from "react-icons/ri";
 
 import { MdBrightness6, MdColorLens, MdAutoAwesome } from "react-icons/md";
 
 import "./animation.css";
-import AISuggestionDialog from "./AISuggestionDialog";
-import ColorPickerDialog from "./ColorPickerDialog";
-import BrightnessDialog from "./BrightnessDialog";
+import AISuggestionDialog from "../../../components/api/dialog/AISuggestionDialog";
+import ColorPickerDialog from "../../../components/api/dialog/ColorPickerDialog";
+import BrightnessDialog from "../../../components/api/dialog/BrightnessDialog";
 import { DashboardHeader } from "components/DashboardHeader";
 import { useAuth } from "~/hooks/useAuth";
 import LoadingSpinner from "components/LoadingSpinner";
@@ -70,8 +54,8 @@ const control = () => {
         if (storedDevice) {
             setDevice(JSON.parse(storedDevice));
         } else {
-            toast.error("Device Not Selected", {
-                description: "Device is not selected. You are redirected to device selection page.",
+            toast.error(messages.toastDeviceMissing.title, {
+                description: messages.toastDeviceMissing.desc,
                 duration: 1500,
             });
             navigate("/lumisenseai");
@@ -79,8 +63,8 @@ const control = () => {
         if (storedGoveeKey) {
             setGoveeKey(storedGoveeKey);
         } else {
-            toast.error("Device Not Selected", {
-                description: "Device is not selected. You are redirected to device selection page.",
+            toast.error(messages.toastDeviceMissing.title, {
+                description: messages.toastDeviceMissing.desc,
                 duration: 1500,
             });
             navigate("/lumisenseai");
@@ -89,8 +73,8 @@ const control = () => {
             const key = JSON.parse(storedAPIKey).key;
             setAPIKey(key);
         } else {
-            toast.error("Device Not Selected", {
-                description: "Device is not selected. You are redirected to device selection page.",
+            toast.error(messages.toastDeviceMissing.title, {
+                description: messages.toastDeviceMissing.desc,
                 duration: 1500,
             });
             navigate("/lumisenseai");
@@ -101,13 +85,13 @@ const control = () => {
 
     return (
         <div className="w-full min-h-screen pb-10">
-            <DashboardHeader title="Lumi Sense AI" />
+            <DashboardHeader title={messages.headerTitle} />
             <Toaster />
 
             <div className="w-full flex-flex-col px-10">
                 {device && (
                     <div className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5">
-                        <h2 className="text-xl font-semibold">You're currently connected to:</h2>
+                        <h2 className="text-xl font-semibold">{messages.connectedTo}</h2>
                         <div className="w-full">
                             <Card>
                                 <CardHeader>
@@ -117,15 +101,15 @@ const control = () => {
                                 <CardContent>
                                     <div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Supported: </p>
+                                            <p>{messages.supportedLabel}</p>
                                             <p>
                                                 {device.controllable
-                                                    ? "Yes, ready to control!"
-                                                    : "Not controllable at the moment."}
+                                                    ? messages.supportedYes
+                                                    : messages.supportedNo}
                                             </p>
                                         </div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Possible Action: </p>
+                                            <p>{messages.possibleAction}</p>
                                             {device.supportCmds.map((cmd: any, idx: number) => {
                                                 return <p key={`${cmd}_${idx}`}>{cmd}</p>;
                                             })}
@@ -146,9 +130,9 @@ const control = () => {
                                 <div className="flex justify-between items-center gap-5 w-full">
                                     <div>
                                         <CardHeader>
-                                            <CardTitle>Turn On</CardTitle>
+                                            <CardTitle>{messages.turnOnTitle}</CardTitle>
                                         </CardHeader>
-                                        <CardContent>Turn on the power of your lamp.</CardContent>
+                                        <CardContent>{messages.turnOnDesc}</CardContent>
                                     </div>
                                     <p className="mr-10">
                                         <HiOutlineLightBulb size={50} />
@@ -164,9 +148,9 @@ const control = () => {
                                 <div className="flex justify-between items-center gap-5 w-full">
                                     <div>
                                         <CardHeader>
-                                            <CardTitle>Turn Off</CardTitle>
+                                            <CardTitle>{messages.turnOffTitle}</CardTitle>
                                         </CardHeader>
-                                        <CardContent>Turn Off the power of your lamp.</CardContent>
+                                        <CardContent>{messages.turnOffDesc}</CardContent>
                                     </div>
                                     <p className="mr-10">
                                         <HiOutlineLightBulb size={50} />
@@ -179,11 +163,11 @@ const control = () => {
                                         <div className="flex justify-between items-center gap-5 w-full">
                                             <div>
                                                 <CardHeader>
-                                                    <CardTitle>Adjust Brightness</CardTitle>
+                                                    <CardTitle>
+                                                        {messages.brightnessTitle}
+                                                    </CardTitle>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    Slide to brighten or dim your lamp as needed.
-                                                </CardContent>
+                                                <CardContent>{messages.brightnessDesc}</CardContent>
                                             </div>
                                             <p className="mr-10">
                                                 <MdBrightness6 size={50} />
@@ -206,12 +190,9 @@ const control = () => {
                                         <div className="flex justify-between items-center gap-5 w-full">
                                             <div>
                                                 <CardHeader>
-                                                    <CardTitle>Pick a Color</CardTitle>
+                                                    <CardTitle>{messages.colorPickTitle}</CardTitle>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    Set your lamp’s color to match your mood or
-                                                    style.
-                                                </CardContent>
+                                                <CardContent>{messages.colorPickDesc}</CardContent>
                                             </div>
                                             <p className="mr-10">
                                                 <MdColorLens size={50} />
@@ -229,12 +210,9 @@ const control = () => {
                                         <div className="flex justify-between items-center gap-5 w-full">
                                             <div>
                                                 <CardHeader>
-                                                    <CardTitle>AI Color Suggestion</CardTitle>
+                                                    <CardTitle>{messages.aiTitle}</CardTitle>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    Let AI suggest the best light color for your
-                                                    current vibe.
-                                                </CardContent>
+                                                <CardContent>{messages.aiDesc}</CardContent>
                                             </div>
                                             <p className="mr-10">
                                                 <MdAutoAwesome size={50} />
@@ -256,7 +234,7 @@ const control = () => {
                             navigate("/lumisenseai");
                         }}
                     >
-                        Back to Device Selection
+                        {messages.backBtn}
                     </Button>
                 </div>
             </div>

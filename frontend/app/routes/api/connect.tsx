@@ -1,50 +1,24 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Button } from "~/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { useNavigate } from "react-router";
-import { useAuth } from "~/hooks/useAuth";
-import LoadingSpinner from "components/LoadingSpinner";
-
 import _ from "lodash";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import "./animation.css";
-import { DashboardHeader } from "components/DashboardHeader";
 import { API_BASE_URL } from "~/lib/api";
-const mockDeviceData = [
-    {
-        device: "F0:72:D6:94:C1:86:73:2A",
-        model: "H6046",
-        deviceName: "RGBIC TV Light Bars",
-        controllable: true,
-        properties: { colorTem: { range: { min: 2000, max: 9000 } } },
-        retrievable: true,
-        supportCmds: ["turn", "brightness", "color", "colorTem"],
-    },
-    {
-        device: "F0:72:D6:94:C1:86:73:2A",
-        model: "H6046",
-        deviceName: "RGBIC TV Light Bars2",
-        controllable: false,
-        properties: { colorTem: { range: { min: 2000, max: 9000 } } },
-        retrievable: true,
-        supportCmds: ["turn", "brightness", "color", "colorTem"],
-    },
-    {
-        device: "F0:72:D6:94:C1:86:73:2A",
-        model: "H6046",
-        deviceName: "RGBIC TV Light Bars3",
-        controllable: true,
-        properties: { colorTem: { range: { min: 2000, max: 9000 } } },
-        retrievable: true,
-        supportCmds: ["turn", "brightness", "color", "colorTem"],
-    },
-];
+import { messages } from "@/lang/api/connect/en";
+
+import { useAuth } from "~/hooks/useAuth";
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { DashboardHeader } from "components/DashboardHeader";
+import LoadingSpinner from "components/LoadingSpinner";
+
+import "./animation.css";
 
 const connect = () => {
-    const { userId, loading } = useAuth();
+    const { loading } = useAuth();
     const navigate = useNavigate();
 
     const [isAPIVerified, setIsAPIVerified] = useState(false);
@@ -100,8 +74,8 @@ const connect = () => {
                 <div className="grid w-full items-center gap-1.5">
                     <Label htmlFor="api-key">
                         {isAPIVerified
-                            ? "Your Govee API key has been registered!"
-                            : "Please enter your device's API key to get started"}
+                            ? messages.goveeKeyPrompt.afterVerify
+                            : messages.goveeKeyPrompt.beforeVerify}
                     </Label>
                     <div className="flex gap-5 w-full">
                         <div className="flex flex-col flex-grow gap-3">
@@ -111,7 +85,7 @@ const connect = () => {
                                 <Input
                                     id="api-key"
                                     type="text"
-                                    placeholder="enter your api key here.."
+                                    placeholder={messages.goveeKeyPrompt.placeholder}
                                     required
                                     value={APIKey}
                                     onChange={(e) => setAPIKey(e.target.value)}
@@ -119,17 +93,19 @@ const connect = () => {
                             )}
                             {isEmptyAPIKey && (
                                 <p className="text-sm text-red-500 ml-1">
-                                    Oops! Please enter your API key.
+                                    {messages.goveeKeyPrompt.emptyWarning}
                                 </p>
                             )}
                         </div>
                         <Button onClick={isAPIVerified ? handleChange : handleSubmit}>
-                            {isAPIVerified ? "Change Key" : "Verify Key"}
+                            {isAPIVerified
+                                ? messages.goveeKeyPrompt.changeBtn
+                                : messages.goveeKeyPrompt.verifyBtn}
                         </Button>
                     </div>
                 </div>
                 <Separator />
-                <h2 className="text-2xl font-bold">Pick a device you’d like to control</h2>
+                <h2 className="text-2xl font-bold">{messages.pickDeviceTitle}</h2>
                 <div className="mt-7 ">
                     <div className="gap-5 grid md:grid-cols-2">
                         {devices.length > 0 ? (
@@ -155,15 +131,15 @@ const connect = () => {
                                         <CardContent>
                                             <div>
                                                 <div className="flex max-w-lg gap-2">
-                                                    <p>Supported: </p>
+                                                    <p>{messages.deviceCard.supportedLabel}</p>
                                                     <p>
                                                         {device.controllable
-                                                            ? "Yes, ready to go!"
-                                                            : "No, not available for control"}
+                                                            ? messages.deviceCard.supportedYes
+                                                            : messages.deviceCard.supportedNo}
                                                     </p>
                                                 </div>
                                                 <div className="flex max-w-lg gap-2">
-                                                    <p>Possible Action: </p>
+                                                    <p>{messages.deviceCard.actionsLabel}</p>
                                                     {device.supportCmds.map(
                                                         (cmd: any, idx: any) => {
                                                             return (
@@ -178,7 +154,7 @@ const connect = () => {
                                 );
                             })
                         ) : (
-                            <p className="text-lg"> No devices found...</p>
+                            <p className="text-lg">{messages.noDeviceFound}</p>
                         )}
                     </div>
                     <div className="mt-10">
@@ -187,7 +163,7 @@ const connect = () => {
                             disabled={!selectedDevice}
                             onClick={handleFinalSelect}
                         >
-                            Connect This Device
+                            {messages.connectButton}
                         </Button>
                     </div>
                 </div>

@@ -1,8 +1,9 @@
+import { useState } from "react";
+
+import { API_BASE_URL } from "~/lib/api";
+import { messages } from "@/lang/api/dialog/BrightnessDialog/en";
 import { Button } from "~/components/ui/button";
 import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogDescription,
@@ -10,8 +11,7 @@ import {
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
-import { API_BASE_URL } from "~/lib/api";
+
 import LoadingSpinner from "components/LoadingSpinner";
 
 interface BrightnessDialogProps {
@@ -21,7 +21,7 @@ interface BrightnessDialogProps {
     device: any;
 }
 
-const BrightnessDialog: React.FC<BrightnessDialogProps> = ({ min, max, goveeKey, device }) => {
+const BrightnessDialog: React.FC<BrightnessDialogProps> = ({ goveeKey, device }) => {
     const [brightness, setBrightness] = useState(50);
     const [isLoading, setIsLoading] = useState(false);
     const setLampBrightness = async (brightness: number) => {
@@ -38,22 +38,21 @@ const BrightnessDialog: React.FC<BrightnessDialogProps> = ({ min, max, goveeKey,
             }),
         });
         if (!response.ok) {
-            console.error("Failed to fetch device: ", response.status);
+            console.error(messages.errorFetch, response.status);
         }
         const result = await response.json();
-        console.log(result);
         setIsLoading(false);
     };
     return (
         <div className="w-full space-y-4 px-4 py-2">
             <AlertDialogHeader className="w-full">
-                <AlertDialogTitle>Pick Brightness 🎨</AlertDialogTitle>
+                <AlertDialogTitle>{messages.title}</AlertDialogTitle>
                 <AlertDialogDescription className="w-full">
                     <div className="flex flex-col w-full justify-center items-center">
-                        <h2 className="font-bold text-2xl">Select Your Lamp Brightness</h2>
+                        <h2 className="font-bold text-2xl">{messages.heading}</h2>
                         <div className="w-full gap-5 mt-7 rounded-2xl shadow-md py-3 px-5">
                             <p className="text-center">
-                                Brightness Range: {1} ~ {100}
+                                {messages.rangeLabel} {1} ~ {100}
                             </p>
                             <Slider
                                 className="mt-7"
@@ -64,7 +63,9 @@ const BrightnessDialog: React.FC<BrightnessDialogProps> = ({ min, max, goveeKey,
                                 value={[brightness]}
                                 onValueChange={(val) => setBrightness(val[0])}
                             />
-                            <p className="mt-7 text-center">Selected Brightness: {brightness}</p>
+                            <p className="mt-7 text-center">
+                                {messages.selectedLabel} {brightness}
+                            </p>
                         </div>
                     </div>
                 </AlertDialogDescription>
@@ -76,9 +77,9 @@ const BrightnessDialog: React.FC<BrightnessDialogProps> = ({ min, max, goveeKey,
                             setLampBrightness(brightness);
                         }}
                     >
-                        Select
+                        {messages.selectBtn}
                     </Button>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{messages.cancelBtn}</AlertDialogCancel>
                 </div>
             </AlertDialogFooter>
             {isLoading && (

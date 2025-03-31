@@ -1,71 +1,28 @@
-import { Button } from "~/components/ui/button";
+import { useState } from "react";
+import ReactDOM from "react-dom";
+
+import { API_BASE_URL } from "@/lib/api";
+import { EMOTION } from "@/lang/api/dialog/AISuggestionDialog/emotion/en";
+import { messages } from "@/lang/api/dialog/AISuggestionDialog/en";
+import { Button } from "@/components/ui/button";
 import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import EmotionCard from "./EmotionCard";
-import { use, useState } from "react";
-import { Label } from "~/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { API_BASE_URL } from "~/lib/api";
-import ReactDOM from "react-dom";
+
+import EmotionCard from "@/../components/api/EmotionCard";
 import AIResultDialog from "./AIResultDialog";
-const EMOTION = [
-    {
-        title: "HAPPY",
-        description: "The world feels extra sparkly today, and so does my heart!",
-        emoji: "😁",
-    },
-    {
-        title: "CALM",
-        description: "It’s a quiet kind of peaceful today — like a gentle breeze hugging my soul.",
-        emoji: "🌿",
-    },
-    {
-        title: "IN LOVE",
-        description: "My heart’s doing a little happy dance whenever I think of someone special.",
-        emoji: "💗",
-    },
-    {
-        title: "SLEEPY",
-        description: "All I want is a cozy blanket, warm tea, and a dreamy nap.",
-        emoji: "😴",
-    },
-    {
-        title: "SAD",
-        description: "It feels a little cloudy inside, but I know the sun will peek out soon.",
-        emoji: "🌧️",
-    },
-    {
-        title: "LONELY",
-        description: "Just me and my thoughts today... I could use a soft hug.",
-        emoji: "😢",
-    },
-    {
-        title: "ANGRY",
-        description:
-            "My feelings are stormy right now — loud and flashing. I just need some space to cool down.",
-        emoji: "🌩️",
-    },
-    {
-        title: "NEUTRAL",
-        description: "Nothing too wild, nothing too quiet — just floating through the day.",
-        emoji: "🎈",
-    },
-];
-import LoadingSpinner from "components/LoadingSpinner";
 
 interface AISuggestionDialogProps {
     goveeKey: string;
     device: any;
 }
+
 const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, device }) => {
     const [selectedEmotion, setSelectedEmotion] = useState("");
     const [AIResult, setAIResult] = useState<any>(null);
@@ -107,10 +64,10 @@ const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, devic
     return (
         <div className="w-full space-y-4 px-4 py-2">
             <AlertDialogHeader className="w-full">
-                <AlertDialogTitle>AI Suggestion</AlertDialogTitle>
+                <AlertDialogTitle>{messages.dialogTitle}</AlertDialogTitle>
                 <AlertDialogDescription>
                     <div className="flex flex-col w-full justify-center items-center">
-                        <h2 className="font-bold text-2xl">Select Your Mood Today</h2>
+                        <h2 className="font-bold text-2xl">{messages.headerTitle}</h2>
                         <div className="grid w-full gap-5 mt-7">
                             {EMOTION.map((item: any, idx: number) => {
                                 return (
@@ -127,11 +84,11 @@ const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, devic
                         </div>
                         <div className="w-full mt-7">
                             <Label className="mb-2" htmlFor="add-request">
-                                Additional Request 💡
+                                {messages.additionalRequestLabel}
                             </Label>
                             <Textarea
                                 id="add-request"
-                                placeholder="Tell me the colors you love or dislike, how you want to feel, or just the vibe you're dreaming of today ✨"
+                                placeholder={messages.additionalRequestPlaceholder}
                                 value={additionalRequest}
                                 onChange={(e) => setAdditionalRequest(e.target.value)}
                             />
@@ -146,9 +103,9 @@ const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, devic
                             setColorByAI(selectedEmotion);
                         }}
                     >
-                        ASK AI
+                        {messages.askButton}
                     </Button>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{messages.cancelButton}</AlertDialogCancel>
                 </div>
             </AlertDialogFooter>
             {isLoading &&

@@ -1,16 +1,18 @@
-import APIKeyCheck from "~/routes/lumisenseAIAPIKeyCheck";
-import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router";
 
-import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster, toast } from "sonner";
-import { useAuth } from "~/hooks/useAuth";
+import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
+
 import LoadingSpinner from "components/LoadingSpinner";
-import "./animation.css";
-import { Separator } from "@/components/ui/separator";
 import { DashboardHeader } from "components/DashboardHeader";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
+import { useAuth } from "~/hooks/useAuth";
+import "./animation.css";
+
 const INTERVAL = 2000;
 const COLOR_CLASS = [
     "text-custom-gray",
