@@ -17,27 +17,28 @@ import {useForm} from "react-hook-form"
 import {z} from "zod"
 import {register} from "~/lib/register";
 import {useState} from "react";
+import { formUi,  zodValidation, metaMessage, errorMessage} from "~/lang/register/en";
 
 
 const formSchema = z.object({
     username: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
+        message: zodValidation.userNameMinLength,
     }),
-    email: z.string().email({message: "Email must be align with the form of xx@xx.xx"}),
-    password: z.string().min(3, {message: "Password must be at least length of 3."}),
-    confirmedPassword: z.string().min(3, {message: "Confirmed password must be at least length of 3."})
+    email: z.string().email({message: zodValidation.emailFormat}),
+    password: z.string().min(3, {message: zodValidation.passwordMinLength}),
+    confirmedPassword: z.string().min(3, {message: zodValidation.confirmedPasswordMinLength}),
 }).refine(
     data => data.confirmedPassword === data.password,
     {
-        message: "Passwords do not match.",
+        message: zodValidation.passwordNotMatch,
         path: ["confirmedPassword"],
     }
 )
 
 export const meta = ({}: Route.MetaArgs) => {
     return [
-        {title: "Register"},
-        {name: "Register", content: "Welcome to register with us!"},
+        {title: metaMessage.title},
+        {name: metaMessage.name, content: metaMessage.description},
     ];
 };
 const Register = () => {
@@ -73,12 +74,12 @@ const Register = () => {
         catch (error){
             console.error(error);
             setSuccess(false);
-            setResult(error instanceof Error ? error.message : "An unexpected error occurred");
+            setResult(error instanceof Error ? error.message : errorMessage.registerError);
         }
     }
     return (
         <div className="w-1/2 mx-auto border border-solid rounded-lg p-6">
-            <h2 className="text-2xl mb-4 font-bold">Register</h2>
+            <h2 className="text-2xl mb-4 font-bold">{formUi.title}</h2>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col">
                         <FormField
@@ -86,14 +87,14 @@ const Register = () => {
                             name="username"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>{formUi.userName}</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="" {...field}
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        This is your public display name.
+                                        {formUi.userNameDiscription}
                                     </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
@@ -104,14 +105,14 @@ const Register = () => {
                             name="email"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{formUi.email}</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="" {...field}
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        This is your email for log in.
+                                        {formUi.emailDiscription}
                                     </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
@@ -122,7 +123,7 @@ const Register = () => {
                             name="password"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{formUi.password}</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="" {...field}
@@ -130,7 +131,7 @@ const Register = () => {
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        This is your password for log in.
+                                        {formUi.passwordDiscription}
                                     </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
@@ -141,7 +142,7 @@ const Register = () => {
                             name="confirmedPassword"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Confirm your password</FormLabel>
+                                    <FormLabel>{formUi.confirmedPassword}</FormLabel>
                                     <FormControl>
                                         <Input
                                             placeholder="" {...field}
@@ -149,15 +150,15 @@ const Register = () => {
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Please confirm your password.
+                                        {formUi.confirmedPasswordDiscription}
                                     </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="rounded ">Submit</Button>
+                        <Button type="submit" className="rounded ">{formUi.submitButton}</Button>
                         <div className="flex flex-col items-center">
-                            <a href="login" className="underline hover:text-blue-900">Have an account? Log in</a>
+                            <a href="login" className="underline hover:text-blue-900">{formUi.loginTip}</a>
                         </div>
                     </form>
                 </Form>
