@@ -1,4 +1,5 @@
 export const messages = {
+    headerTitle: "LumiSenseAI",
     page: {
         title: "Register API Key",
         description: "Select your API key from below to access the Lumi Sense AI services.",

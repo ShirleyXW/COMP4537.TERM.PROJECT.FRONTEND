@@ -85,7 +85,7 @@ const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, devic
                 <AlertDialogTitle>{messages.dialogTitle}</AlertDialogTitle>
                 <AlertDialogDescription>
                     <div className="flex flex-col w-full justify-center items-center">
-                        <h2 className="font-bold text-2xl">{messages.headerTitle}</h2>
+                        <p className="font-bold text-2xl">{messages.headerTitle}</p>
                         <div className="grid w-full gap-5 mt-7">
                             {EMOTION.map((item: any, idx: number) => {
                                 return (
