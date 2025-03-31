@@ -12,5 +12,6 @@ export const ui = {
 export const messages = {
     authError: "Authentication error: Your session has expired. Please log in again.",
     fetchingKey: "fetching keys",
-    fetchKeysError: "Failed to fetch keys"
+    fetchKeysError: "Failed to fetch keys",
+    usageWarning: "You have exceeded 20 requests!"
 }

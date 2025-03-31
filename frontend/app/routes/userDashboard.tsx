@@ -134,9 +134,19 @@ const UserDashboard = () => {
                         </div>
                     </CardHeader>
                     <CardContent className="">
-                        <p className="text-4xl font-bold text-green-600 dark:text-green-400 ">
-                            {usage?.total_used} / {usage?.request_limit ?? "--"}
-                        </p>
+                            <p className={`text-4xl font-bold ${
+                                    usage?.total_used && usage.total_used >= 21
+                                        ? "text-red-600 dark:text-red-400"
+                                        : "text-green-600 dark:text-green-400"
+                                }`}
+                            >
+                                {usage?.total_used} / {usage?.request_limit ?? "--"}
+                            </p>
+                            {usage?.total_used && usage.total_used >= 21 && (
+                                <p className="mt-2 text-sm text-red-600 dark:text-red-400 font-medium">
+                                    ⚠️ {messages.usageWarning}
+                                </p>
+                            )}
                     </CardContent>
                 </Card>
             </div>
