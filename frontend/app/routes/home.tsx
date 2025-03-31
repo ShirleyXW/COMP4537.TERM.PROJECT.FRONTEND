@@ -5,9 +5,10 @@ import { getIsAdmin } from "~/lib/admin";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "components/LoadingSpinner";
+import { metaMessage, routers, errorMessage } from "~/lang/landing/en";
 
 export const meta = ({}: Route.MetaArgs) => {
-    return [{ title: "Lumisenseai" }, { name: "description", content: "Welcome to React Router!" }];
+    return [{ title: metaMessage.title }, { name: metaMessage.name, content: metaMessage.content }];
 };
 
 const Home = () => {
@@ -22,12 +23,12 @@ const Home = () => {
                 setIsAdmin(isAdminData);
 
                 if (isAdminData) {
-                    navigate("/adminDashboard");
+                    navigate(routers.admin);
                 } else if (isAdminData == false) {
-                    navigate("/userDashboard");
+                    navigate(routers.user);
                 }
             } catch (error) {
-                console.error("Failed to check redirect", error);
+                console.error(errorMessage.redirectError, error);
             } finally {
                 setLoading(false);
             }

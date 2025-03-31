@@ -1,91 +1,135 @@
 import { useEffect, useState } from "react";
+import { messages } from "@/lang/api/control/en";
+import { toastMessages } from "@/lang/api/toast/en";
 import { Separator } from "~/components/ui/separator";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router";
 import { Toaster, toast } from "sonner";
-import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { HiOutlineLightBulb } from "react-icons/hi";
-import { RiLightbulbLine } from "react-icons/ri";
 
 import { MdBrightness6, MdColorLens, MdAutoAwesome } from "react-icons/md";
 
 import "./animation.css";
-import AISuggestionDialog from "./AISuggestionDialog";
-import ColorPickerDialog from "./ColorPickerDialog";
-import BrightnessDialog from "./BrightnessDialoig";
+import AISuggestionDialog from "../../../components/api/dialog/AISuggestionDialog";
+import ColorPickerDialog from "../../../components/api/dialog/ColorPickerDialog";
+import BrightnessDialog from "../../../components/api/dialog/BrightnessDialog";
 import { DashboardHeader } from "components/DashboardHeader";
 import { useAuth } from "~/hooks/useAuth";
 import LoadingSpinner from "components/LoadingSpinner";
+import { API_BASE_URL } from "~/lib/api";
 
 const control = () => {
-    const { userId, loading } = useAuth();
+    const turnOnAndOff = async (isOn: boolean) => {
+        setIsLoading(true);
+        const keyData = localStorage.getItem("selectedKey");
+        let apiKey;
+        if (keyData) {
+            const parsedKeyData = JSON.parse(keyData);
+            apiKey = parsedKeyData.key;
+        } else {
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
+        }
+        const response = await fetch(`${API_BASE_URL}/lumisenseai/turn-on-off`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-service-api-key": apiKey,
+            },
+            body: JSON.stringify({
+                goveeKey: goveeKey.trim(),
+                device: device,
+                isOn: isOn,
+            }),
+        });
+        if (!response.ok) {
+            console.error(response.status);
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
+        }
+        const result = await response.json();
+        console.log(result);
+        setIsLoading(false);
+    };
+    const [isLoading, setIsLoading] = useState(false);
+    const { loading } = useAuth();
+    const [goveeKey, setGoveeKey] = useState<any>("");
+    const [APIKey, setAPIKey] = useState<any>("");
+    const [device, setDevice] = useState<any>({});
     const navigate = useNavigate();
 
-    const [selectedDevice, setSelectedDevice] = useState<any>(null);
     useEffect(() => {
         const storedDevice = localStorage.getItem("selectedDevice");
+        const storedGoveeKey = localStorage.getItem("goveeKey");
+        const storedAPIKey = localStorage.getItem("selectedKey");
         if (storedDevice) {
-            setSelectedDevice(JSON.parse(storedDevice));
+            setDevice(JSON.parse(storedDevice));
         } else {
-            toast.error("Device Not Selected", {
-                description: "Device is not selected. You are redirected to device selection page.",
+            toast.error(messages.toastDeviceMissing.title, {
+                description: messages.toastDeviceMissing.desc,
+                duration: 1500,
+            });
+            navigate("/lumisenseai");
+        }
+        if (storedGoveeKey) {
+            setGoveeKey(storedGoveeKey);
+        } else {
+            toast.error(messages.toastDeviceMissing.title, {
+                description: messages.toastDeviceMissing.desc,
+                duration: 1500,
+            });
+            navigate("/lumisenseai");
+        }
+        if (storedAPIKey) {
+            const key = JSON.parse(storedAPIKey).key;
+            setAPIKey(key);
+        } else {
+            toast.error(messages.toastDeviceMissing.title, {
+                description: messages.toastDeviceMissing.desc,
                 duration: 1500,
             });
             navigate("/lumisenseai");
         }
     }, []);
 
-    if (loading) return <LoadingSpinner />
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="w-full min-h-screen pb-10">
-            <DashboardHeader title="Lumi Sense AI" />
+            <DashboardHeader title={messages.headerTitle} />
             <Toaster />
 
-            <div className="w-full flex-flex-col">
-                {selectedDevice && (
+            <div className="w-full flex-flex-col px-10">
+                {device && (
                     <div className="w-full md:px-10 flex flex-col justify-center items-center mt-10 gap-5">
-                        <h2 className="text-xl font-semibold">You're currently connected to:</h2>
+                        <h2 className="text-xl font-semibold">{messages.connectedTo}</h2>
                         <div className="w-full">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>{`${selectedDevice.deviceName} (${selectedDevice.model})`}</CardTitle>
-                                    <CardDescription>{`${selectedDevice.device}`}</CardDescription>
+                                    <CardTitle>{`${device.deviceName} (${device.model})`}</CardTitle>
+                                    <CardDescription>{`${device.device}`}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     <div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Supported: </p>
+                                            <p>{messages.supportedLabel}</p>
                                             <p>
-                                                {selectedDevice.controllable
-                                                    ? "Yes, ready to control!"
-                                                    : "Not controllable at the moment."}
+                                                {device.controllable
+                                                    ? messages.supportedYes
+                                                    : messages.supportedNo}
                                             </p>
                                         </div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Possible Action: </p>
-                                            {selectedDevice.supportCmds.map(
-                                                (cmd: any, idx: number) => {
-                                                    return <p key={`${cmd}_${idx}`}>{cmd}</p>;
-                                                }
-                                            )}
+                                            <p>{messages.possibleAction}</p>
+                                            {device.supportCmds.map((cmd: any, idx: number) => {
+                                                return <p key={`${cmd}_${idx}`}>{cmd}</p>;
+                                            })}
                                         </div>
                                     </div>
                                 </CardContent>
@@ -94,15 +138,36 @@ const control = () => {
 
                         <Separator className="mt-10" />
                         <div className="grid md:grid-cols-2 gap-x-10 gap-y-5 w-full">
-                            <Card className="hover-click-animation w-full">
+                            <Card
+                                className="hover-click-animation w-full"
+                                onClick={() => {
+                                    turnOnAndOff(true);
+                                }}
+                            >
                                 <div className="flex justify-between items-center gap-5 w-full">
                                     <div>
                                         <CardHeader>
-                                            <CardTitle>Turn On / Off</CardTitle>
+                                            <CardTitle>{messages.turnOnTitle}</CardTitle>
                                         </CardHeader>
-                                        <CardContent>
-                                            Toggle the power of your lamp with a single tap.
-                                        </CardContent>
+                                        <CardContent>{messages.turnOnDesc}</CardContent>
+                                    </div>
+                                    <p className="mr-10">
+                                        <HiOutlineLightBulb size={50} />
+                                    </p>
+                                </div>
+                            </Card>
+                            <Card
+                                className="hover-click-animation w-full"
+                                onClick={() => {
+                                    turnOnAndOff(false);
+                                }}
+                            >
+                                <div className="flex justify-between items-center gap-5 w-full">
+                                    <div>
+                                        <CardHeader>
+                                            <CardTitle>{messages.turnOffTitle}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>{messages.turnOffDesc}</CardContent>
                                     </div>
                                     <p className="mr-10">
                                         <HiOutlineLightBulb size={50} />
@@ -115,11 +180,11 @@ const control = () => {
                                         <div className="flex justify-between items-center gap-5 w-full">
                                             <div>
                                                 <CardHeader>
-                                                    <CardTitle>Adjust Brightness</CardTitle>
+                                                    <CardTitle>
+                                                        {messages.brightnessTitle}
+                                                    </CardTitle>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    Slide to brighten or dim your lamp as needed.
-                                                </CardContent>
+                                                <CardContent>{messages.brightnessDesc}</CardContent>
                                             </div>
                                             <p className="mr-10">
                                                 <MdBrightness6 size={50} />
@@ -129,8 +194,10 @@ const control = () => {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
                                     <BrightnessDialog
-                                        min={selectedDevice.properties.colorTem.range.min}
-                                        max={selectedDevice.properties.colorTem.range.max}
+                                        min={device.properties.colorTem.range.min}
+                                        max={device.properties.colorTem.range.max}
+                                        goveeKey={goveeKey}
+                                        device={device}
                                     />
                                 </AlertDialogContent>
                             </AlertDialog>
@@ -140,12 +207,9 @@ const control = () => {
                                         <div className="flex justify-between items-center gap-5 w-full">
                                             <div>
                                                 <CardHeader>
-                                                    <CardTitle>Pick a Color</CardTitle>
+                                                    <CardTitle>{messages.colorPickTitle}</CardTitle>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    Set your lamp’s color to match your mood or
-                                                    style.
-                                                </CardContent>
+                                                <CardContent>{messages.colorPickDesc}</CardContent>
                                             </div>
                                             <p className="mr-10">
                                                 <MdColorLens size={50} />
@@ -154,7 +218,7 @@ const control = () => {
                                     </Card>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
-                                    <ColorPickerDialog />
+                                    <ColorPickerDialog goveeKey={goveeKey} device={device} />
                                 </AlertDialogContent>
                             </AlertDialog>
                             <AlertDialog>
@@ -163,12 +227,9 @@ const control = () => {
                                         <div className="flex justify-between items-center gap-5 w-full">
                                             <div>
                                                 <CardHeader>
-                                                    <CardTitle>AI Color Suggestion</CardTitle>
+                                                    <CardTitle>{messages.aiTitle}</CardTitle>
                                                 </CardHeader>
-                                                <CardContent>
-                                                    Let AI suggest the best light color for your
-                                                    current vibe.
-                                                </CardContent>
+                                                <CardContent>{messages.aiDesc}</CardContent>
                                             </div>
                                             <p className="mr-10">
                                                 <MdAutoAwesome size={50} />
@@ -177,7 +238,7 @@ const control = () => {
                                     </Card>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent className="w-full overflow-y-auto max-h-[80vh]">
-                                    <AISuggestionDialog />
+                                    <AISuggestionDialog goveeKey={goveeKey} device={device} />
                                 </AlertDialogContent>
                             </AlertDialog>
                         </div>
@@ -190,11 +251,17 @@ const control = () => {
                             navigate("/lumisenseai");
                         }}
                     >
-                        {" "}
-                        Back to Device Selection
+                        {messages.backBtn}
                     </Button>
                 </div>
             </div>
+            {isLoading && (
+                <div className="fixed inset-0 z-50 bg-custom-gray/30  flex items-center justify-center">
+                    <div className="bg-white rounded-full p-5 shadow-lg">
+                        <LoadingSpinner />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

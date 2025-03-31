@@ -1,24 +1,19 @@
-import APIKeyCheck from "components/APIKeyCheckForm";
-import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
+import { useNavigate } from "react-router";
+
 import { motion, AnimatePresence } from "framer-motion";
-// import { Toaster } from "@/components/ui/sonner";
-// import { toast } from "sonner";
 import { Toaster, toast } from "sonner";
-import { useAuth } from "~/hooks/useAuth";
+import { MdLinkOff, MdAddLink, MdLightbulb } from "react-icons/md";
+
 import LoadingSpinner from "components/LoadingSpinner";
-import "./animation.css";
-import { Separator } from "@/components/ui/separator";
 import { DashboardHeader } from "components/DashboardHeader";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
+import { useAuth } from "~/hooks/useAuth";
+import "./animation.css";
+import { messages } from "~/lang/api/lumisenseai/en";
+
 const INTERVAL = 2000;
 const COLOR_CLASS = [
     "text-custom-gray",
@@ -28,22 +23,30 @@ const COLOR_CLASS = [
     "text-custom-coral-pink",
 ];
 const LumiSenseAI = () => {
-    const { userId, loading } = useAuth();
+    const { loading } = useAuth();
     const navigate = useNavigate();
-    const [isKeyChecked, setIsKeyChecked] = useState(true);
     const [selectedDevice, setSelectedDevice] = useState<any>(null);
     const [colorIndex, setColorIndex] = useState(0);
-
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedKey, setSelectedKey] = useState<any>({});
     useEffect(() => {
+        const storedAPIKey = localStorage.getItem("selectedKey");
+        if (!storedAPIKey) {
+            navigate("/lumisenseai/api/key/check");
+            return;
+        }
+        setSelectedKey(JSON.parse(storedAPIKey));
         const storedDevice = localStorage.getItem("selectedDevice");
         if (storedDevice) {
             setSelectedDevice(JSON.parse(storedDevice));
         }
+        setIsLoading(false);
         const interval = setInterval(() => {
             setColorIndex((prev) => (prev + 1) % COLOR_CLASS.length);
         }, INTERVAL);
         return () => clearInterval(interval);
     }, []);
+
     const [isClosing, setIsClosing] = useState(false);
     const handleDisconnect = () => {
         setIsClosing(true);
@@ -53,12 +56,25 @@ const LumiSenseAI = () => {
             setIsClosing(false);
         }, 500);
     };
-    if (loading) return <LoadingSpinner />
-    if (!isKeyChecked) return <APIKeyCheck />;
+    if (loading || isLoading) return <LoadingSpinner />;
+
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
-            <DashboardHeader title="Lumi Sense AI" />
+            <DashboardHeader title={messages.headerTitle} />
             <Toaster />
+            <div className="w-full py-5 flex flex-col items-center ">
+                <p>{messages.connectedTo}</p>
+                <div className=" w-full flex flex-col justify-center items-center">
+                    <div className="flex w-1/2">
+                        <p className="w-1/4">{messages.keyName}</p>
+                        <p>{selectedKey.key_name}</p>
+                    </div>
+                    <div className="flex w-1/2">
+                        <p className="w-1/4">{messages.key}</p>
+                        <p>{selectedKey.key}</p>
+                    </div>
+                </div>
+            </div>
             <AnimatePresence>
                 {selectedDevice && (
                     <motion.div
@@ -70,7 +86,7 @@ const LumiSenseAI = () => {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-xl font-semibold">You're currently connected to:</h2>
+                        <h2 className="text-xl font-semibold">{messages.connectedDevice}</h2>
                         <div className="w-full">
                             <Card>
                                 <CardHeader>
@@ -80,15 +96,15 @@ const LumiSenseAI = () => {
                                 <CardContent>
                                     <div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Supported: </p>
+                                            <p>{messages.supported}</p>
                                             <p>
                                                 {selectedDevice.controllable
-                                                    ? "Yes, ready to control!"
-                                                    : "Not controllable at the moment."}
+                                                    ? messages.supportedYes
+                                                    : messages.supportedNo}
                                             </p>
                                         </div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Possible Action: </p>
+                                            <p>{messages.possibleActions}</p>
                                             {selectedDevice.supportCmds.map(
                                                 (cmd: any, idx: number) => {
                                                     return <p key={`${cmd}_${idx}`}>{cmd}</p>;
@@ -112,11 +128,9 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Connect a Device</CardTitle>
+                                <CardTitle>{messages.connectDevice.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                Tap here to select a smart lamp you'd like to use.
-                            </CardContent>
+                            <CardContent>{messages.connectDevice.description}</CardContent>
                         </div>
                         <p className="mr-10">
                             <MdAddLink size={50} />
@@ -128,8 +142,8 @@ const LumiSenseAI = () => {
                     onClick={() => {
                         window.localStorage.removeItem("selectedDevice");
                         handleDisconnect();
-                        toast.success("Disconnected!", {
-                            description: "Your lamp successfully disconnected.",
+                        toast.success(messages.disconnectDevice.toastTitle, {
+                            description: messages.disconnectDevice.toastDescription,
                             duration: 1500,
                         });
                         setSelectedDevice(null);
@@ -138,11 +152,9 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Disconnect Device</CardTitle>
+                                <CardTitle>{messages.disconnectDevice.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                Not this one? Tap to remove the connected device.
-                            </CardContent>
+                            <CardContent>{messages.disconnectDevice.description}</CardContent>
                         </div>
                         <p className="mr-10">
                             <MdLinkOff size={50} />
@@ -153,8 +165,8 @@ const LumiSenseAI = () => {
                     className="hover-click-animation md:col-span-2"
                     onClick={() => {
                         if (!selectedDevice) {
-                            toast.error("Lamp Not Selected!", {
-                                description: "Select your lamp to control it.",
+                            toast.error(messages.controlLamp.toastTitle, {
+                                description: messages.controlLamp.toastDescription,
                                 duration: 1000,
                             });
                             return;
@@ -165,11 +177,9 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Control Your Lamp</CardTitle>
+                                <CardTitle>{messages.controlLamp.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                Customize brightness, color, and more in real time!
-                            </CardContent>
+                            <CardContent>{messages.controlLamp.description}</CardContent>
                         </div>
                         <p className="mr-10">
                             <MdLightbulb
