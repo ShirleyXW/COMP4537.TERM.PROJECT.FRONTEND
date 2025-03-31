@@ -28,10 +28,22 @@ const BrightnessDialog: React.FC<BrightnessDialogProps> = ({ goveeKey, device })
     const [isLoading, setIsLoading] = useState(false);
     const setLampBrightness = async (brightness: number) => {
         setIsLoading(true);
+        const keyData = localStorage.getItem("selectedKey");
+        let apiKey;
+        if (keyData) {
+            const parsedKeyData = JSON.parse(keyData);
+            apiKey = parsedKeyData.key;
+        } else {
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
+        }
         const response = await fetch(`${API_BASE_URL}/lumisenseai/set-brightness`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "x-service-api-key": apiKey,
             },
             body: JSON.stringify({
                 goveeKey: goveeKey.trim(),

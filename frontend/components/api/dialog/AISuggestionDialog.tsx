@@ -41,10 +41,22 @@ const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, devic
         const minutes = String(now.getMinutes()).padStart(2, "0");
         const time = `${hours}:${minutes}`;
         const addReq = additionalRequest.length == 0 ? null : additionalRequest;
+        const keyData = localStorage.getItem("selectedKey");
+        let apiKey;
+        if (keyData) {
+            const parsedKeyData = JSON.parse(keyData);
+            apiKey = parsedKeyData.key;
+        } else {
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
+        }
         const response = await fetch(`${API_BASE_URL}/lumisenseai/set-color-by-ai`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "x-service-api-key": apiKey,
             },
             body: JSON.stringify({
                 goveeKey: goveeKey.trim(),
