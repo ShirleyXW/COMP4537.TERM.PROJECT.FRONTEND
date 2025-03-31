@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import { API_BASE_URL } from "@/lib/api";
 import { EMOTION } from "@/lang/api/dialog/AISuggestionDialog/emotion/en";
 import { messages } from "@/lang/api/dialog/AISuggestionDialog/en";
+import { toastMessages } from "~/lang/api/toast/en";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
     AlertDialogHeader,
@@ -13,6 +15,7 @@ import {
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
+
 import { Textarea } from "@/components/ui/textarea";
 
 import EmotionCard from "@/../components/api/EmotionCard";
@@ -52,7 +55,10 @@ const AISuggestionDialog: React.FC<AISuggestionDialogProps> = ({ goveeKey, devic
             }),
         });
         if (!response.ok) {
-            console.error("Failed to fetch device: ", response.status);
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
         }
         const result = await response.json();
         setAIResult(result.data);

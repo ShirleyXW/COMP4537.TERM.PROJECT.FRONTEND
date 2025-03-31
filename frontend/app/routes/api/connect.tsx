@@ -4,9 +4,9 @@ import _ from "lodash";
 
 import { API_BASE_URL } from "~/lib/api";
 import { messages } from "@/lang/api/connect/en";
-
+import { toastMessages } from "~/lang/api/toast/en";
 import { useAuth } from "~/hooks/useAuth";
-
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "~/components/ui/button";
@@ -37,7 +37,10 @@ const connect = () => {
             }),
         });
         if (!response.ok) {
-            console.error("Failed to fetch device: ", response.status);
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
         }
         const data = await response.json();
         setDevices(data.data.devices);

@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import { API_BASE_URL } from "~/lib/api";
 import { messages } from "~/lang/api/dialog/ColorPickerDialog/en";
+import { toastMessages } from "~/lang/api/toast/en";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
     AlertDialogHeader,
@@ -54,7 +56,10 @@ const ColorPickerDialog: React.FC<ColorPickerDialogProps> = ({ goveeKey, device 
             }),
         });
         if (!response.ok) {
-            console.error(messages.errorFetch, response.status);
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
         }
         const result = await response.json();
         console.log(result);

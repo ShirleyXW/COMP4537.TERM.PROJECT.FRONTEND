@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { messages } from "@/lang/api/control/en";
+import { toastMessages } from "@/lang/api/toast/en";
 import { Separator } from "~/components/ui/separator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router";
@@ -34,7 +35,11 @@ const control = () => {
             }),
         });
         if (!response.ok) {
-            console.error("Failed to fetch device: ", response.status);
+            console.error(response.status);
+            toast.error(toastMessages.error.title, {
+                description: toastMessages.error.description,
+                duration: 1500,
+            });
         }
         const result = await response.json();
         console.log(result);
