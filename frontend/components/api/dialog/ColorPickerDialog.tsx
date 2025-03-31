@@ -84,7 +84,7 @@ const ColorPickerDialog: React.FC<ColorPickerDialogProps> = ({ goveeKey, device 
                 <AlertDialogTitle>{messages.dialogTitle}</AlertDialogTitle>
                 <AlertDialogDescription className="w-full">
                     <div className="flex flex-col w-full justify-center items-center">
-                        <h2 className="font-bold text-2xl">{messages.heading}</h2>
+                        <p className="font-bold text-2xl">{messages.heading}</p>
                         <div className="w-full gap-5 mt-7 rounded-2xl shadow-md py-3">
                             <HexColorPicker
                                 color={color}

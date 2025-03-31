@@ -21,10 +21,10 @@ const AIResultDialog: React.FC<AIResultDialogProps> = ({ data, setAIResult }) =>
             <AlertDialogHeader className="w-full">
                 <AlertDialogDescription>
                     <div className="flex flex-col w-full justify-center items-center">
-                        <h2 className="font-bold text-2xl">{messages.magicTitle}</h2>
+                        <p className="font-bold text-2xl">{messages.magicTitle}</p>
 
                         <div className="w-full mt-7 flex flex-col items-center">
-                            <h3 className="font-bold text-xl mb-5">{messages.moodColorTitle}</h3>
+                            <p className="font-bold text-xl mb-5">{messages.moodColorTitle}</p>
                             <div className="w-full flex justify-center flex-col items-center">
                                 <div
                                     className={`w-[100px] h-[100px] border-2 rounded-lg flex justify-center border-custom-gray items-center shadow-lg`}
