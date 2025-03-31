@@ -133,7 +133,7 @@ const UserDashboard = () => {
                     </CardHeader>
                     <CardContent className="">
                         <p className="text-4xl font-bold text-green-600 dark:text-green-400 ">
-                            {usage?.total_used} / {usage?.remaining_requests ?? "--"}
+                            {usage?.total_used} / {usage?.request_limit ?? "--"}
                         </p>
                     </CardContent>
                 </Card>
