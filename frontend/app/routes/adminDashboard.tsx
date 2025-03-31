@@ -18,7 +18,7 @@ import {
 
 import type { User } from "~/lib/user";
 import type { Admin } from "~/lib/admin";
-import { fetchUserBreakdown, fetchEndpointBreakdown } from "~/lib/adminDashboard";
+import { fetchUserBreakdown, fetchEndpointBreakdown, fetchApiKeyForUser } from "~/lib/adminDashboard";
 import { KeyRound } from "lucide-react";
 import { ui, messages } from "~/lang/admin_dashboard/en";
 
@@ -49,7 +49,16 @@ const AdminDashboard = () => {
             try {
                 const adminData = await fetchAdmin();
                 setAdmin(adminData);
-                // setUsers([]);
+                
+                const userId = adminData.user_id;
+                const userKeys = await fetchApiKeyForUser(userId);
+
+                if (userKeys?.length) {
+                    localStorage.setItem("api_key", userKeys[0].key);
+                } else {
+                    localStorage.removeItem("api_key");
+                }
+
                 const data = await fetchUserBreakdown();
                 setUserStats(data);
 
