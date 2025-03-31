@@ -1,7 +1,0 @@
-@import "tailwindcss";
-
-@layer components {
-    .hover-click-animation {
-        @apply transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer;
-    }
-}
