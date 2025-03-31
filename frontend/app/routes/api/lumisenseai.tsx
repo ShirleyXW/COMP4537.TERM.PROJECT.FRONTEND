@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { useAuth } from "~/hooks/useAuth";
 import "./animation.css";
+import { messages } from "~/lang/api/lumisenseai/en";
 
 const INTERVAL = 2000;
 const COLOR_CLASS = [
@@ -59,17 +60,17 @@ const LumiSenseAI = () => {
 
     return (
         <div className="w-full min-h-screen flex flex-col max-h-screen">
-            <DashboardHeader title="Lumi Sense AI" />
+            <DashboardHeader title={messages.headerTitle} />
             <Toaster />
             <div className="w-full py-5 flex flex-col items-center ">
-                <p>Currently Connected to: </p>
+                <p>{messages.connectedTo}</p>
                 <div className=" w-full flex flex-col justify-center items-center">
                     <div className="flex w-1/2">
-                        <p className="w-1/4">Key Name: </p>
+                        <p className="w-1/4">{messages.keyName}</p>
                         <p>{selectedKey.key_name}</p>
                     </div>
                     <div className="flex w-1/2">
-                        <p className="w-1/4">Key: </p>
+                        <p className="w-1/4">{messages.key}</p>
                         <p>{selectedKey.key}</p>
                     </div>
                 </div>
@@ -85,7 +86,7 @@ const LumiSenseAI = () => {
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-xl font-semibold">You're currently connected to:</h2>
+                        <h2 className="text-xl font-semibold">{messages.connectedDevice}</h2>
                         <div className="w-full">
                             <Card>
                                 <CardHeader>
@@ -95,15 +96,15 @@ const LumiSenseAI = () => {
                                 <CardContent>
                                     <div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Supported: </p>
+                                            <p>{messages.supported}</p>
                                             <p>
                                                 {selectedDevice.controllable
-                                                    ? "Yes, ready to control!"
-                                                    : "Not controllable at the moment."}
+                                                    ? messages.supportedYes
+                                                    : messages.supportedNo}
                                             </p>
                                         </div>
                                         <div className="flex max-w-lg gap-2">
-                                            <p>Possible Action: </p>
+                                            <p>{messages.possibleActions}</p>
                                             {selectedDevice.supportCmds.map(
                                                 (cmd: any, idx: number) => {
                                                     return <p key={`${cmd}_${idx}`}>{cmd}</p>;
@@ -127,11 +128,9 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Connect a Device</CardTitle>
+                                <CardTitle>{messages.connectDevice.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                Tap here to select a smart lamp you'd like to use.
-                            </CardContent>
+                            <CardContent>{messages.connectDevice.description}</CardContent>
                         </div>
                         <p className="mr-10">
                             <MdAddLink size={50} />
@@ -143,8 +142,8 @@ const LumiSenseAI = () => {
                     onClick={() => {
                         window.localStorage.removeItem("selectedDevice");
                         handleDisconnect();
-                        toast.success("Disconnected!", {
-                            description: "Your lamp successfully disconnected.",
+                        toast.success(messages.disconnectDevice.toastTitle, {
+                            description: messages.disconnectDevice.toastDescription,
                             duration: 1500,
                         });
                         setSelectedDevice(null);
@@ -153,11 +152,9 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Disconnect Device</CardTitle>
+                                <CardTitle>{messages.disconnectDevice.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                Not this one? Tap to remove the connected device.
-                            </CardContent>
+                            <CardContent>{messages.disconnectDevice.description}</CardContent>
                         </div>
                         <p className="mr-10">
                             <MdLinkOff size={50} />
@@ -168,8 +165,8 @@ const LumiSenseAI = () => {
                     className="hover-click-animation md:col-span-2"
                     onClick={() => {
                         if (!selectedDevice) {
-                            toast.error("Lamp Not Selected!", {
-                                description: "Select your lamp to control it.",
+                            toast.error(messages.controlLamp.toastTitle, {
+                                description: messages.controlLamp.toastDescription,
                                 duration: 1000,
                             });
                             return;
@@ -180,11 +177,9 @@ const LumiSenseAI = () => {
                     <div className="flex justify-between items-center gap-5">
                         <div>
                             <CardHeader>
-                                <CardTitle>Control Your Lamp</CardTitle>
+                                <CardTitle>{messages.controlLamp.title}</CardTitle>
                             </CardHeader>
-                            <CardContent>
-                                Customize brightness, color, and more in real time!
-                            </CardContent>
+                            <CardContent>{messages.controlLamp.description}</CardContent>
                         </div>
                         <p className="mr-10">
                             <MdLightbulb
