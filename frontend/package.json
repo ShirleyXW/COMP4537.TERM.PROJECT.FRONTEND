@@ -45,7 +45,8 @@
         "tailwind-merge": "^3.0.2",
         "tailwindcss-animate": "^1.0.7",
         "tw-animate-css": "^1.2.4",
-        "zod": "^3.24.2"
+        "zod": "^3.24.2",
+        "color-namer": "^1.4.0"
     },
     "devDependencies": {
         "@react-router/dev": "^7.3.0",
