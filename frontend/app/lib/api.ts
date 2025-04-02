@@ -6,12 +6,9 @@
 const isDevelopment = false;
 
 // Set the base URL based on the environment
-// export const API_BASE_URL = isDevelopment
-//     ? "http://localhost:8000"
-//     : "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
-
-export const API_BASE_URL = "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
-
+export const API_BASE_URL = isDevelopment
+    ? "http://localhost:8000"
+    : "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
 
 // Function to get the full API URL for a given endpoint
 export const getApiUrl = (endpoint: string): string => {
