@@ -24,6 +24,13 @@ export const fetchUserBreakdown = async (): Promise<UserBreakdown[]> => {
     return res.data.data;
 };
 
+export async function fetchAllEndpoints() {
+    const response = await axios.get(`${API_BASE_URL}/all-endpoints`, {
+        withCredentials: true,
+    });
+    return response.data;
+}
+
 export const fetchEndpointBreakdown = async (): Promise<EndpointBreakdown[]> => {
     const res = await axios.get(`${API_BASE_URL}/admin/stats/endpoint-breakdown`, {
         withCredentials: true,

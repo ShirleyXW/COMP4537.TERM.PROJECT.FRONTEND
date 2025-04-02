@@ -18,7 +18,7 @@ import {
 
 import type { User } from "~/lib/user";
 import type { Admin } from "~/lib/admin";
-import { fetchUserBreakdown, fetchEndpointBreakdown } from "~/lib/adminDashboard";
+import { fetchUserBreakdown, fetchEndpointBreakdown, fetchAllEndpoints } from "~/lib/adminDashboard";
 import { KeyRound } from "lucide-react";
 import { ui, messages } from "~/lang/admin_dashboard/en";
 
@@ -52,6 +52,9 @@ const AdminDashboard = () => {
                 // setUsers([]);
                 const data = await fetchUserBreakdown();
                 setUserStats(data);
+
+                const endpoints = await fetchAllEndpoints();
+                console.log("All endpoints:", endpoints)
 
                 // endpoint stats
                 const endpointData = await fetchEndpointBreakdown();
