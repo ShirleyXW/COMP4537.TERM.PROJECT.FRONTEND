@@ -6,6 +6,7 @@ export default [
     route("userDashboard", "routes/userDashboard.tsx"),
     route("adminDashboard", "routes/adminDashboard.tsx"),
     route("login", "routes/login.tsx"),
+    route("lumisenseai/api/key/check", "routes/api/lumisenseAIAPIKeyCheck.tsx"),
     route("lumisenseai", "routes/api/lumisenseai.tsx"),
     route("lumisenseai/connect", "routes/api/connect.tsx"),
     route("lumisenseai/control", "routes/api/control.tsx"),
