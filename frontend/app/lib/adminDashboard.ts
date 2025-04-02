@@ -1,4 +1,4 @@
-
+// This code was developed with the assistance of ChatGPT.
 import axios from "axios";
 
 const API_BASE_URL = "https://bcit-anthony-sh-s.com/lumisenseai/api/v1";
@@ -23,6 +23,7 @@ export const fetchUserBreakdown = async (): Promise<UserBreakdown[]> => {
 
     return res.data.data;
 };
+
 
 export const fetchEndpointBreakdown = async (): Promise<EndpointBreakdown[]> => {
     const res = await axios.get(`${API_BASE_URL}/admin/stats/endpoint-breakdown`, {
