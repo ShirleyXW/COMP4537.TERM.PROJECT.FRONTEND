@@ -115,7 +115,7 @@ const AISuggestionDialog = () => {
                             <Checkbox
                                 id="weather"
                                 checked={useLocation}
-                                onCheckedChange={(checked) => {
+                                onCheckedChange={(checked: any) => {
                                     setUseLocation(checked === true);
                                     console.log(useLocation);
                                 }}
